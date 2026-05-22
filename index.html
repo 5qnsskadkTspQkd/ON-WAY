@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>SafeMap</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- 언어 선택 -->
+        <div class="lang-box">
+
+            <select id="langSelect">
+
+                <option value="ko">한국어</option>
+
+                <option value="en">English</option>
+
+                <option value="ja">日本語</option>
+
+                <option value="zh">中文</option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- 제목 -->
+        <h1 id="title">
+            SafeMap
+        </h1>
+
+
+
+        <!-- 부제목 -->
+        <p id="subtitle">
+
+            사용자 맞춤 안전 지도 서비스
+
+        </p>
+
+
+
+        <!-- 서비스 설명 -->
+        <div class="service-box">
+
+            <h2 id="serviceTitle">
+                서비스 소개
+            </h2>
+
+            <p id="serviceText">
+
+                SafeMap은 사용자 유형에 따라<br>
+
+                안전한 이동 경로와 필요한 시설 정보를 제공하는<br>
+
+                스마트 안전 지도 서비스입니다.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- 사용자 선택 -->
+        <h2 class="select-title" id="selectTitle">
+
+            사용자 유형 선택
+
+        </h2>
+
+
+
+        <!-- 버튼 -->
+        <div class="buttons">
+
+            <button
+            onclick="movePage('child.html')"
+            id="childBtn">
+
+                어린이 및 청소년 
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('disabled.html')"
+            id="disabledBtn">
+
+                장애인
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('senior.html')"
+            id="seniorBtn">
+
+                노인
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('pregnant.html')"
+            id="pregnantBtn">
+
+                임산부
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('tourist.html')"
+            id="touristBtn">
+
+                관광
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('weak.html')"
+            id="weakBtn">
+
+                이동약자
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('emergency.html')"
+            id="emergencyBtn">
+
+                응급환자
+
+            </button>
+
+
+
+            <button
+            onclick="movePage('adult.html')"
+            id="adultBtn">
+
+                일반(성인)
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
