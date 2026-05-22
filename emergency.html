@@ -1,114 +1,140 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>응급환자 안전 지도</title>
-    <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f5f6f7;
-        }
-        .header-bar {
-            width: 800px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-        #map {
-            width: 800px;
-            height: 550px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>응급환자 안전 지도</title>
+<style>
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f6f7;
+}
+.header-bar {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.back-btn:hover {
+  background-color: #5a6268;
+}
+#map {
+  width: 800px;
+  height: 550px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
 </head>
 <body>
+<div class="header-bar">
+  <h2 id="mapTitle">응급환자 안전 지도</h2>
+  <button class="back-btn" onclick="location.href='index.html'">
+    🏠 홈으로
+  </button>
+</div>
+<div id="map"></div>
 
-    <div class="header-bar">
-        <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
-        <h2 id="mapTitle">응급환자 안전 지도</h2>
-        <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
-    </div>
+<script>
+function initMap() {
+  const defaultCenter = { lat: 36.5, lng: 127.8 };
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 7,
+    center: defaultCenter
+  });
 
-    <div id="map"></div>
+  const bounds = new google.maps.LatLngBounds();
 
-    <script>
-        function initMap() {
-            // 이 페이지의 기본 카메라 중심 좌표
-            const defaultCenter = { lat: 37.566535, lng: 126.977969 };
-            
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 14,
-                center: defaultCenter,
-            });
+  // ✅ 소방서 API
+  const firePromise = fetch("https://api.odcloud.kr/api/15138232/v1/uddi:da0c6c93-f05a-453d-849f-e4c3697222e3?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c")
+    .then(res => res.json())
+    .then(data => {
+      data.data.forEach(place => {
+        const lat = parseFloat(place["X좌표"]);
+        const lng = parseFloat(place["Y좌표"]);
+        const name = place["소방서 및 안전센터명"] || "소방서";
+        if (isNaN(lat) || isNaN(lng)) return;
 
-            // ========================================================
-            // [데이터 구역] 이 페이지에만 표시될 다중 마커 배열
-            // 각 파일마다 원하는 마커 이름과 위도, 경도를 자유롭게 적으세요.
-            // ========================================================
-            const safetyPlaces = [
-                { title: "어린이 보호구역 A", lat: 37.5668, lng: 126.9723 },
-                { title: "아동 안심 지킴이집 B", lat: 37.5715, lng: 126.9768 },
-                { title: "어린이 보행 안전구역 C", lat: 37.5651, lng: 126.9760 }
-            ];
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/2776/2776067.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
 
-            // 배열에 담긴 데이터만큼 지도에 마커를 생성합니다
-            safetyPlaces.forEach((place) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: place.lat, lng: place.lng },
-                    map: map,
-                    title: place.title
-                });
+        const infowindow = new google.maps.InfoWindow({
+          content: `<div style="padding:10px;"><strong>🚒 ${name}</strong><br>${place["주소"] || ""}</div>`
+        });
+        marker.addListener("click", () => infowindow.open(map, marker));
+        bounds.extend({ lat, lng });
+      });
+    });
 
-                const infowindow = new google.maps.InfoWindow({
-                    content: `<div style="padding:10px; color:#333;">
-                                <strong>${place.title}</strong><br>
-                                안심 안전 서비스를 지원하는 위치입니다.
-                              </div>`
-                });
+  // ✅ 서울시 병원 API
+  const hospitalPromise = fetch("http://openapi.seoul.go.kr:8088/43444846746e61793639686d594859/xml/TbHospitalInfo/1/100/")
+    .then(res => res.text())
+    .then(xmlText => {
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(xmlText, "application/xml");
+      const rows = xml.querySelectorAll("row");
 
-                marker.addListener("click", () => {
-                    infowindow.open(map, marker);
-                });
-            });
+      rows.forEach(row => {
+        const lat = parseFloat(row.querySelector("WGS84LAT")?.textContent);
+        const lng = parseFloat(row.querySelector("WGS84LON")?.textContent);
+        const name = row.querySelector("DUTYNAME")?.textContent || "병원";
+        const addr = row.querySelector("DUTYADDR")?.textContent || "";
+        if (isNaN(lat) || isNaN(lng)) return;
 
-            // 데이터가 있다면 첫 번째 마커 위치로 카메라를 이동합니다
-            if (safetyPlaces.length > 0) {
-                map.setCenter({ lat: safetyPlaces[0].lat, lng: safetyPlaces[0].lng });
-            }
-        }
-    </script>
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/2785/2785482.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
 
-    <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-    </script>
+        const infowindow = new google.maps.InfoWindow({
+          content: `<div style="padding:10px;"><strong>🏥 ${name}</strong><br>${addr}</div>`
+        });
+        marker.addListener("click", () => infowindow.open(map, marker));
+        bounds.extend({ lat, lng });
+      });
+    });
 
-    <script src="language.js"></script>
+  // ✅ 둘 다 끝나면 지도 범위 맞춤
+  Promise.all([firePromise, hospitalPromise])
+    .then(() => map.fitBounds(bounds))
+    .catch(err => console.error("API 오류:", err));
+}
+</script>
 
-    <script>
-
-        applyLanguage("emergency");
-
-    </script>
+<!-- 구글 맵 API -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+</script>
+<script src="language.js"></script>
+<script>
+  applyLanguage("emergency");
+</script>
 </body>
 </html>
