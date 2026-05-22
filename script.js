@@ -1,16 +1,233 @@
 // ==============================
-// 페이지 이동 함수
+// 언어 데이터
 // ==============================
 
-function movePage(page) {
+const langData = {
 
-    location.href = page;
+    ko: {
+
+        title: "ON:WAY",
+
+        subtitle:
+        "사용자 맞춤형 안전 지도 서비스",
+
+        serviceTitle:
+        "서비스 소개",
+
+        serviceText:
+        "ON:WAY는 '안전한 길 위에 있다'는 뜻으로<br>사용자에 따른 맞춤형 안전 이동 경로와 필요한 시설 정보를 제공하는<br>스마트 안전 지도 서비스입니다.",
+
+        selectTitle:
+        "사용자 유형 선택",
+
+        child:
+        "어린이 및 청소년",
+
+        disabled:
+        "장애인",
+
+        senior:
+        "노인",
+
+        pregnant:
+        "임산부",
+
+        tourist:
+        "관광",
+
+        moveweak:
+        "이동약자",
+
+        emergency:
+        "응급환자",
+
+        adult:
+        "일반(성인)"
+    },
+
+
+
+    en: {
+
+        title: "ON:WAY",
+
+        subtitle:
+        "Personalized Safety Map Service",
+
+        serviceTitle:
+        "Service Introduction",
+
+        serviceText:
+        "ON:WAY means 'on the path to safety'<br>and provides personalized safe routes and essential facility information<br>through a smart safety map service.",
+
+        selectTitle:
+        "Select User Type",
+
+        child:
+        "Children & Youth",
+
+        disabled:
+        "Disabled",
+
+        senior:
+        "Senior",
+
+        pregnant:
+        "Pregnant Women",
+
+        tourist:
+        "Tourist",
+
+        moveweak:
+        "Mobility Support",
+
+        emergency:
+        "Emergency Patient",
+
+        adult:
+        "Adult"
+    },
+
+
+
+    ja: {
+
+        title: "ON:WAY",
+
+        subtitle:
+        "ユーザー別安全地図サービス",
+
+        serviceTitle:
+        "サービス紹介",
+
+        serviceText:
+        "ON:WAYは『安全な道の上にいる』という意味を持ち、<br>利用者に合わせた安全移動経路と必要な施設情報を提供する<br>スマート安全地図サービスです。",
+
+        selectTitle:
+        "利用者タイプ選択",
+
+        child:
+        "子供・青少年",
+
+        disabled:
+        "障害者",
+
+        senior:
+        "高齢者",
+
+        pregnant:
+        "妊婦",
+
+        tourist:
+        "観光",
+
+        moveweak:
+        "移動弱者",
+
+        emergency:
+        "救急患者",
+
+        adult:
+        "一般成人"
+    },
+
+
+
+    zh: {
+
+        title: "ON:WAY",
+
+        subtitle:
+        "用户定制安全地图服务",
+
+        serviceTitle:
+        "服务介绍",
+
+        serviceText:
+        "ON:WAY 意味着“走在安全的道路上”，<br>根据不同用户提供个性化安全路线与必要设施信息的<br>智能安全地图服务。",
+
+        selectTitle:
+        "选择用户类型",
+
+        child:
+        "儿童及青少年",
+
+        disabled:
+        "残障人士",
+
+        senior:
+        "老年人",
+
+        pregnant:
+        "孕妇",
+
+        tourist:
+        "旅游",
+
+        moveweak:
+        "行动不便者",
+
+        emergency:
+        "急救患者",
+
+        adult:
+        "成人"
+    }
+};
+
+
+
+// ==============================
+// 언어 변경 함수
+// ==============================
+
+function changeLanguage(lang) {
+
+    localStorage.setItem("language", lang);
+
+
+
+    document.getElementById("subtitle").innerText =
+    langData[lang].subtitle;
+
+    document.getElementById("serviceTitle").innerText =
+    langData[lang].serviceTitle;
+
+    document.getElementById("serviceText").innerHTML =
+    langData[lang].serviceText;
+
+    document.getElementById("selectTitle").innerText =
+    langData[lang].selectTitle;
+
+    document.getElementById("childBtn").innerText =
+    langData[lang].child;
+
+    document.getElementById("disabledBtn").innerText =
+    langData[lang].disabled;
+
+    document.getElementById("seniorBtn").innerText =
+    langData[lang].senior;
+
+    document.getElementById("pregnantBtn").innerText =
+    langData[lang].pregnant;
+
+    document.getElementById("touristBtn").innerText =
+    langData[lang].tourist;
+
+    document.getElementById("moveweakBtn").innerText =
+    langData[lang].moveweak;
+
+    document.getElementById("emergencyBtn").innerText =
+    langData[lang].emergency;
+
+    document.getElementById("adultBtn").innerText =
+    langData[lang].adult;
 }
 
 
 
 // ==============================
-// 언어 선택
+// 언어 선택 이벤트
 // ==============================
 
 const langSelect =
@@ -18,276 +235,35 @@ document.getElementById("langSelect");
 
 
 
-langSelect.addEventListener("change", function () {
+langSelect.addEventListener("change", function() {
 
-    const lang = langSelect.value;
-
-
-
-    // ==========================
-    // 한국어
-    // ==========================
-
-    if (lang === "ko") {
-
-        document.getElementById("subtitle").innerText =
-        "사용자 맞춤 안전 지도 서비스";
-
-
-
-        document.getElementById("serviceTitle").innerText =
-        "서비스 소개";
-
-
-
-        document.getElementById("serviceText").innerHTML =
-        "SafeMap은 사용자 유형에 따라<br>안전한 이동 경로와 필요한 시설 정보를 제공하는<br>스마트 안전 지도 서비스입니다.";
-
-
-
-        document.getElementById("selectTitle").innerText =
-        "사용자 유형 선택";
-
-
-
-        document.getElementById("childBtn").innerText =
-        "어린이 및 청소년";
-
-
-
-        document.getElementById("disabledBtn").innerText =
-        "장애인";
-
-
-
-        document.getElementById("seniorBtn").innerText =
-        "노인";
-
-
-
-        document.getElementById("pregnantBtn").innerText =
-        "임산부";
-
-
-
-        document.getElementById("touristBtn").innerText =
-        "관광";
-
-
-
-        document.getElementById("weakBtn").innerText =
-        "이동약자";
-
-
-
-        document.getElementById("emergencyBtn").innerText =
-        "응급환자";
-
-
-
-        document.getElementById("adultBtn").innerText =
-        "일반(성인)";
-    }
-
-
-
-    // ==========================
-    // 영어
-    // ==========================
-
-    else if (lang === "en") {
-
-        document.getElementById("subtitle").innerText =
-        "Personalized Safety Navigation Service";
-
-
-
-        document.getElementById("serviceTitle").innerText =
-        "About Service";
-
-
-
-        document.getElementById("serviceText").innerHTML =
-        "SafeMap provides safe routes and useful facility information<br>depending on the user's situation and type.";
-
-
-
-        document.getElementById("selectTitle").innerText =
-        "Select User Type";
-
-
-
-        document.getElementById("childBtn").innerText =
-        "Children & Teenagers";
-
-
-
-        document.getElementById("disabledBtn").innerText =
-        "Disabled";
-
-
-
-        document.getElementById("seniorBtn").innerText =
-        "Senior";
-
-
-
-        document.getElementById("pregnantBtn").innerText =
-        "Pregnant Woman";
-
-
-
-        document.getElementById("touristBtn").innerText =
-        "Tourist";
-
-
-
-        document.getElementById("weakBtn").innerText =
-        "Mobility Weak";
-
-
-
-        document.getElementById("emergencyBtn").innerText =
-        "Emergency Patient";
-
-
-
-        document.getElementById("adultBtn").innerText =
-        "Adult";
-    }
-
-
-
-    // ==========================
-    // 일본어
-    // ==========================
-
-    else if (lang === "ja") {
-
-        document.getElementById("subtitle").innerText =
-        "ユーザー別安全地図サービス";
-
-
-
-        document.getElementById("serviceTitle").innerText =
-        "サービス紹介";
-
-
-
-        document.getElementById("serviceText").innerHTML =
-        "SafeMapは利用者タイプに応じて<br>安全な移動経路と必要な施設情報を提供する<br>スマート安全地図サービスです。";
-
-
-
-        document.getElementById("selectTitle").innerText =
-        "利用者タイプ選択";
-
-
-
-        document.getElementById("childBtn").innerText =
-        "子供・青少年";
-
-
-
-        document.getElementById("disabledBtn").innerText =
-        "障害者";
-
-
-
-        document.getElementById("seniorBtn").innerText =
-        "高齢者";
-
-
-
-        document.getElementById("pregnantBtn").innerText =
-        "妊婦";
-
-
-
-        document.getElementById("touristBtn").innerText =
-        "観光";
-
-
-
-        document.getElementById("weakBtn").innerText =
-        "移動弱者";
-
-
-
-        document.getElementById("emergencyBtn").innerText =
-        "救急患者";
-
-
-
-        document.getElementById("adultBtn").innerText =
-        "一般成人";
-    }
-
-
-
-    // ==========================
-    // 중국어
-    // ==========================
-
-    else if (lang === "zh") {
-
-        document.getElementById("subtitle").innerText =
-        "用户定制安全地图服务";
-
-
-
-        document.getElementById("serviceTitle").innerText =
-        "服务介绍";
-
-
-
-        document.getElementById("serviceText").innerHTML =
-        "SafeMap根据用户类型提供<br>安全路线和设施信息的智能地图服务。";
-
-
-
-        document.getElementById("selectTitle").innerText =
-        "选择用户类型";
-
-
-
-        document.getElementById("childBtn").innerText =
-        "儿童及青少年";
-
-
-
-        document.getElementById("disabledBtn").innerText =
-        "残疾人";
-
-
-
-        document.getElementById("seniorBtn").innerText =
-        "老人";
-
-
-
-        document.getElementById("pregnantBtn").innerText =
-        "孕妇";
-
-
-
-        document.getElementById("touristBtn").innerText =
-        "旅游";
-
-
-
-        document.getElementById("weakBtn").innerText =
-        "行动不便者";
-
-
-
-        document.getElementById("emergencyBtn").innerText =
-        "急诊患者";
-
-
-
-        document.getElementById("adultBtn").innerText =
-        "普通成人";
-    }
+    changeLanguage(this.value);
 
 });
+
+
+
+// ==============================
+// 페이지 이동 함수
+// ==============================
+
+function movePage(page) {
+
+    location.href = page;
+
+}
+
+
+
+// ==============================
+// 처음 실행 시 저장된 언어 적용
+// ==============================
+
+const savedLang =
+localStorage.getItem("language") || "ko";
+
+
+
+langSelect.value = savedLang;
+
+changeLanguage(savedLang);

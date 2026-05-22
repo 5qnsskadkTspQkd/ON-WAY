@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임산부 안전 지도</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f6f7;
+        }
+        .header-bar {
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        #map {
+            width: 800px;
+            height: 550px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
+        <h2 id="mapTitle">임산부 안전 지도</h2>
+        <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            // 이 페이지의 기본 카메라 중심 좌표
+            const defaultCenter = { lat: 37.566535, lng: 126.977969 };
+            
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 14,
+                center: defaultCenter,
+            });
+
+            // ========================================================
+            // [데이터 구역] 이 페이지에만 표시될 다중 마커 배열
+            // 각 파일마다 원하는 마커 이름과 위도, 경도를 자유롭게 적으세요.
+            // ========================================================
+            const safetyPlaces = [
+                { title: "어린이 보호구역 A", lat: 37.5668, lng: 126.9723 },
+                { title: "아동 안심 지킴이집 B", lat: 37.5715, lng: 126.9768 },
+                { title: "어린이 보행 안전구역 C", lat: 37.5651, lng: 126.9760 }
+            ];
+
+            // 배열에 담긴 데이터만큼 지도에 마커를 생성합니다
+            safetyPlaces.forEach((place) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: place.lat, lng: place.lng },
+                    map: map,
+                    title: place.title
+                });
+
+                const infowindow = new google.maps.InfoWindow({
+                    content: `<div style="padding:10px; color:#333;">
+                                <strong>${place.title}</strong><br>
+                                안심 안전 서비스를 지원하는 위치입니다.
+                              </div>`
+                });
+
+                marker.addListener("click", () => {
+                    infowindow.open(map, marker);
+                });
+            });
+
+            // 데이터가 있다면 첫 번째 마커 위치로 카메라를 이동합니다
+            if (safetyPlaces.length > 0) {
+                map.setCenter({ lat: safetyPlaces[0].lat, lng: safetyPlaces[0].lng });
+            }
+        }
+    </script>
+
+    <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+    </script>
+
+    <script src="language.js"></script>
+
+    <script>
+
+        applyLanguage("pregnant");
+
+    </script>
+</body>
+</html>

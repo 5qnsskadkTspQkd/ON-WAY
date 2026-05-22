@@ -45,7 +45,7 @@
 
     <div class="header-bar">
         <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
-        <h2 id="mapTitle">🎒 어린이 및 청소년 안전 지도</h2>
+        <h2 id="mapTitle">어린이 및 청소년 안전 지도</h2>
         <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
     </div>
 
@@ -101,6 +101,14 @@
     <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+    </script>
+
+    <script src="language.js"></script>
+
+    <script>
+
+        applyLanguage("child");
+
     </script>
 </body>
 </html>
