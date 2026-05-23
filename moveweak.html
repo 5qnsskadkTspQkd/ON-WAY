@@ -1,114 +1,287 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이동약자 안전 지도</title>
-    <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f5f6f7;
-        }
-        .header-bar {
-            width: 800px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-        #map {
-            width: 800px;
-            height: 550px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title id="pageTitleTag">이동약자 안전 지도</title>
+
+<style>
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f6f7;
+}
+
+.header-bar {
+    width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.back-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    background-color: #5a6268;
+}
+
+#map {
+    width: 800px;
+    height: 550px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 범례 */
+.legend {
+    width: 800px;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.legend h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.legend-item img {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+}
+
+.legend-text {
+    font-size: 15px;
+    color: #333;
+}
+
+@media (max-width: 850px) {
+    .header-bar,
+    #map,
+    .legend {
+        width: 95%;
+    }
+
+    #map {
+        height: 500px;
+    }
+}
+</style>
 </head>
 <body>
 
-    <div class="header-bar">
-        <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
-        <h2 id="mapTitle">이동약자 안전 지도</h2>
-        <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+<div class="header-bar">
+    <h2 id="mapTitle">이동약자 안전 지도</h2>
+
+    <button class="back-btn" id="homeBtn"
+    onclick="location.href='index.html'">
+    🏠 홈으로
+    </button>
+</div>
+
+<div id="map"></div>
+
+<!-- 범례 -->
+<div class="legend">
+
+    <h3 id="legendTitle">📍 지도 마커 안내</h3>
+
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/2942/2942100.png">
+        <div class="legend-text" id="cctvText">🎥 CCTV 위치</div>
     </div>
 
-    <div id="map"></div>
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
+        <div class="legend-text" id="streetText">💡 가로등 위치</div>
+    </div>
 
-    <script>
-        function initMap() {
-            // 이 페이지의 기본 카메라 중심 좌표
-            const defaultCenter = { lat: 37.566535, lng: 126.977969 };
-            
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 14,
-                center: defaultCenter,
-            });
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
+        <div class="legend-text" id="crowdHighText">👥 유동인구 많은 지역</div>
+    </div>
 
-            // ========================================================
-            // [데이터 구역] 이 페이지에만 표시될 다중 마커 배열
-            // 각 파일마다 원하는 마커 이름과 위도, 경도를 자유롭게 적으세요.
-            // ========================================================
-            const safetyPlaces = [
-                { title: "어린이 보호구역 A", lat: 37.5668, lng: 126.9723 },
-                { title: "아동 안심 지킴이집 B", lat: 37.5715, lng: 126.9768 },
-                { title: "어린이 보행 안전구역 C", lat: 37.5651, lng: 126.9760 }
-            ];
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png">
+        <div class="legend-text" id="crowdLowText">🌿 유동인구 적은 지역</div>
+    </div>
 
-            // 배열에 담긴 데이터만큼 지도에 마커를 생성합니다
-            safetyPlaces.forEach((place) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: place.lat, lng: place.lng },
-                    map: map,
-                    title: place.title
-                });
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+        <div class="legend-text" id="accidentText">⚠️ 교통사고 다발구역</div>
+    </div>
 
-                const infowindow = new google.maps.InfoWindow({
-                    content: `<div style="padding:10px; color:#333;">
-                                <strong>${place.title}</strong><br>
-                                안심 안전 서비스를 지원하는 위치입니다.
-                              </div>`
-                });
+    <div class="legend-item">
+        <img src="https://cdn-icons-png.flaticon.com/512/1048/1048362.png">
+        <div class="legend-text" id="elevatorText">♿ 지하철 승강기 위치 및 가동 현황</div>
+    </div>
+</div>
 
-                marker.addListener("click", () => {
-                    infowindow.open(map, marker);
-                });
-            });
+<script>
+function initMap() {
 
-            // 데이터가 있다면 첫 번째 마커 위치로 카메라를 이동합니다
-            if (safetyPlaces.length > 0) {
-                map.setCenter({ lat: safetyPlaces[0].lat, lng: safetyPlaces[0].lng });
+    const lang =
+        localStorage.getItem("language") || "ko";
+
+    const t = translations[lang]["moveweak"];
+
+    const defaultCenter = { lat: 37.566535, lng: 126.977969 };
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: defaultCenter,
+    });
+
+    const bounds = new google.maps.LatLngBounds();
+
+    // 데이터 배열
+    const dataMarkers = [
+
+        // CCTV
+        {
+            title: t.cctvMarker1,
+            lat: 37.5668,
+            lng: 126.9785,
+            icon: "https://cdn-icons-png.flaticon.com/512/2942/2942100.png",
+            description: t.cctvDesc
+        },
+
+        {
+            title: t.cctvMarker2,
+            lat: 37.5682,
+            lng: 126.9761,
+            icon: "https://cdn-icons-png.flaticon.com/512/2942/2942100.png",
+            description: t.cctvDesc
+        },
+
+        // 가로등
+        {
+            title: t.streetMarker1,
+            lat: 37.5651,
+            lng: 126.9745,
+            icon: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
+            description: t.streetDesc
+        },
+
+        {
+            title: t.streetMarker2,
+            lat: 37.5675,
+            lng: 126.9770,
+            icon: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
+            description: t.streetDesc
+        },
+
+        // 유동인구 많은곳
+        {
+            title: t.crowdMarker,
+            lat: 37.4979,
+            lng: 127.0276,
+            icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+            description: t.crowdDesc
+        },
+
+        // 유동인구 적은곳
+        {
+            title: t.quietMarker,
+            lat: 37.5705,
+            lng: 126.9832,
+            icon: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
+            description: t.quietDesc
+        },
+
+        // 교통사고 다발구역
+        {
+            title: t.accidentMarker,
+            lat: 37.5662,
+            lng: 126.9820,
+            icon: "https://cdn-icons-png.flaticon.com/512/564/564619.png",
+            description: t.accidentDesc
+        },
+
+        // 지하철 승강기
+        {
+            title: t.elevatorMarker1,
+            lat: 37.5550,
+            lng: 126.9700,
+            icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
+            description: t.elevatorDesc
+        },
+
+        {
+            title: t.elevatorMarker2,
+            lat: 37.5600,
+            lng: 126.9750,
+            icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
+            description: t.elevatorDesc
+        },
+    ];
+
+    dataMarkers.forEach(place => {
+
+        const marker = new google.maps.Marker({
+            position: { lat: place.lat, lng: place.lng },
+            map: map,
+            title: place.title,
+            icon: {
+                url: place.icon,
+                scaledSize: new google.maps.Size(40, 40)
             }
-        }
-    </script>
+        });
 
-    <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-    </script>
+        const infowindow = new google.maps.InfoWindow({
+            content: `
+            <div style="padding:10px;">
+                <strong>${place.title}</strong><br>
+                ${place.description}
+            </div>`
+        });
 
-    <script src="language.js"></script>
+        marker.addListener("click", () => {
+            infowindow.open(map, marker);
+        });
 
-    <script>
+        bounds.extend(marker.getPosition());
+    });
 
-        applyLanguage("moveweak");
+    if (!bounds.isEmpty()) {
+        map.fitBounds(bounds);
+    }
+}
+</script>
 
-    </script>
+<!-- 구글 맵 API -->
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+</script>
+
+<script src="language.js"></script>
+
+<script>
+applyLanguage("moveweak");
+</script>
+
 </body>
 </html>

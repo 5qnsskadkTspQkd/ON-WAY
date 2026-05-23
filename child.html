@@ -1,114 +1,790 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>어린이 및 청소년 안전 지도</title>
-    <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f5f6f7;
-        }
-        .header-bar {
-            width: 800px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-        #map {
-            width: 800px;
-            height: 550px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitleTag">어린이 및 청소년 안전 지도</title>
+
+<style>
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f6f7;
+}
+
+.header-bar {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+#map {
+  width: 800px;
+  height: 550px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.legend {
+  width: 800px;
+  margin-top: 15px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.legend h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-item img {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+
+.legend-text {
+  font-size: 15px;
+  color: #333;
+}
+
+@media (max-width: 850px) {
+  .header-bar,
+  #map,
+  .legend {
+    width: 95%;
+  }
+
+  #map {
+    height: 500px;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="header-bar">
-        <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
-        <h2 id="mapTitle">어린이 및 청소년 안전 지도</h2>
-        <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+<div class="header-bar">
+  <h2 id="pageTitle">어린이 및 청소년 안전 지도</h2>
+  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
+</div>
+
+<div id="map"></div>
+
+<div class="legend">
+  <h3 id="legendTitle">📍 지도 마커 안내</h3>
+  <div class="legend-grid">
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/3175/3175150.png">
+      <div class="legend-text" id="streetlightText">💡 가로등 위치</div>
     </div>
 
-    <div id="map"></div>
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2989/2989610.png">
+      <div class="legend-text" id="peopleUpText">📈 유동인구 많은 곳</div>
+    </div>
 
-    <script>
-        function initMap() {
-            // 이 페이지의 기본 카메라 중심 좌표
-            const defaultCenter = { lat: 37.566535, lng: 126.977969 };
-            
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 14,
-                center: defaultCenter,
-            });
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2989/2989635.png">
+      <div class="legend-text" id="peopleDownText">📉 유동인구 적은 곳</div>
+    </div>
 
-            // ========================================================
-            // [데이터 구역] 이 페이지에만 표시될 다중 마커 배열
-            // 각 파일마다 원하는 마커 이름과 위도, 경도를 자유롭게 적으세요.
-            // ========================================================
-            const safetyPlaces = [
-                { title: "어린이 보호구역 A", lat: 37.5668, lng: 126.9723 },
-                { title: "아동 안심 지킴이집 B", lat: 37.5715, lng: 126.9768 },
-                { title: "어린이 보행 안전구역 C", lat: 37.5651, lng: 126.9760 }
-            ];
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2967/2967350.png">
+      <div class="legend-text" id="accidentText">🚑 교통사고 다발 구역</div>
+    </div>
 
-            // 배열에 담긴 데이터만큼 지도에 마커를 생성합니다
-            safetyPlaces.forEach((place) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: place.lat, lng: place.lng },
-                    map: map,
-                    title: place.title
-                });
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
+      <div class="legend-text" id="crimeText">⚠️ 범죄 발생 구역</div>
+    </div>
 
-                const infowindow = new google.maps.InfoWindow({
-                    content: `<div style="padding:10px; color:#333;">
-                                <strong>${place.title}</strong><br>
-                                안심 안전 서비스를 지원하는 위치입니다.
-                              </div>`
-                });
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/10149/10149360.png">
+      <div class="legend-text" id="safeZoneText">🛡️ 안심 구역</div>
+    </div>
 
-                marker.addListener("click", () => {
-                    infowindow.open(map, marker);
-                });
-            });
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/3448/3448339.png">
+      <div class="legend-text" id="transitText">🚌 대중교통</div>
+    </div>
 
-            // 데이터가 있다면 첫 번째 마커 위치로 카메라를 이동합니다
-            if (safetyPlaces.length > 0) {
-                map.setCenter({ lat: safetyPlaces[0].lat, lng: safetyPlaces[0].lng });
-            }
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
+      <div class="legend-text" id="bikeText">🚲 따릉이 대여소</div>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/7521/7521191.png">
+      <div class="legend-text" id="constructionText">⚠️ 공사장·공폐가</div>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/9856/9856787.png">
+      <div class="legend-text" id="schoolZoneText">🧒 어린이 보호 구역</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ✅ language.js -->
+<script src="language.js"></script>
+<script>
+  applyLanguage("child");
+</script>
+
+<script>
+function initMap() {
+
+  const defaultCenter = {
+    lat: 36.5,
+    lng: 127.8
+  };
+
+  const map = new google.maps.Map(
+    document.getElementById("map"),
+    {
+      zoom: 7,
+      center: defaultCenter
+    }
+  );
+
+  const bounds = new google.maps.LatLngBounds();
+
+  // 가로등 위치
+  const streetlightPromise = fetch(
+    "https://api.data.go.kr/openapi/tn_pubr_public_streetlght_info_api?pageNo=1&numOfRows=100&type=json&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c"
+  )
+    .then(res => res.json())
+    .then(result => {
+      const items = result.response?.body?.items || [];
+      items.forEach(place => {
+        const lat = parseFloat(place["latitude"]);
+        const lng = parseFloat(place["longitude"]);
+        const name = place["lnmadr"] || place["rdnmadr"] || "가로등";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/3175/3175150.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const address = place["rdnmadr"] || place["lnmadr"] || "주소 정보 없음";
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>💡 가로등 위치</strong><br>
+              <small style="color: #666;">${name}</small><br>
+              ${address}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 유동인구 많은 곳
+  const peopleUpPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/59747974776e61793633694379484a/xml/sDoTPeople/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("X_COORD")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("Y_COORD")[0]?.textContent);
+        const name = place.getElementsByTagName("SPOT_NM")[0]?.textContent || "유동인구 조사지점";
+        const peopleCount = place.getElementsByTagName("TOT_PEOPLE")[0]?.textContent || "0";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/2989/2989610.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>📈 ${name}</strong><br>
+              총 유동인구수: ${Number(peopleCount).toLocaleString()}명
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 유동인구 적은 곳
+  const peopleDownPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/59747974776e61793633694379484a/xml/sDoTPeople/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("X_COORD")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("Y_COORD")[0]?.textContent);
+        const name = place.getElementsByTagName("SPOT_NM")[0]?.textContent || "유동인구 조사지점";
+        const peopleCount = place.getElementsByTagName("TOT_PEOPLE")[0]?.textContent || "0";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/2989/2989635.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>📉 ${name}</strong><br>
+              총 유동인구수: ${Number(peopleCount).toLocaleString()}명
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+      // 교통사고 다발 구역
+  const accidentPromise = fetch(
+  "http://apis.data.go.kr/B552061/frequentzoneLg/getRestFrequentzoneLg?searchYearCd=2024&siDo=11&guGun=110&type=xml&numOfRows=10&pageNo=1&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c"
+)
+  .then(res => res.text())
+  .then(xmlString => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const items = xmlDoc.getElementsByTagName("item");
+
+    Array.from(items).forEach(place => {
+      const lat = parseFloat(place.getElementsByTagName("la_crd")[0]?.textContent);
+      const lng = parseFloat(place.getElementsByTagName("lo_crd")[0]?.textContent);
+
+      const name = place.getElementsByTagName("spot_nm")[0]?.textContent || "교통사고 다발지역";
+      const occCount = place.getElementsByTagName("occurrnc_cnt")[0]?.textContent || "0"; 
+      const casCount = place.getElementsByTagName("caslt_co_cnt")[0]?.textContent || "0"; 
+
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        title: name,
+        icon: {
+          url: "https://cdn-icons-png.flaticon.com/512/564/564619.png",
+          scaledSize: new google.maps.Size(40, 40)
         }
-    </script>
+      });
 
-    <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-    </script>
+      const infowindow = new google.maps.InfoWindow({
+        content: `
+          <div style="padding:10px; min-width: 180px;">
+            <strong style="color: #d9381e;">🚨 교통사고 위험구역</strong><br>
+            <small style="font-weight: bold; color: #333;">${name}</small>
+            <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
+            <span style="font-size: 12px;">💥 사고 발생: <b>${occCount}건</b></span><br>
+            <span style="font-size: 12px;">🩸 총 사상자: <b style="color: #d9381e;">${casCount}명</b></span>
+          </div>
+        `
+      });
 
-    <script src="language.js"></script>
+      marker.addListener("click", () => {
+        infowindow.open(map, marker);
+      });
 
-    <script>
+      bounds.extend({ lat, lng });
+    });
+  });
 
-        applyLanguage("child");
+  // 범죄
+    const crimeWmsLayer = new google.maps.ImageMapType({
+    getTileUrl: function (coord, zoom) {
+    const proj = map.getProjection();
+    const zpow = Math.pow(2, zoom);
+    
+    const ul = new google.maps.Point((coord.x * 256) / zpow, ((coord.y + 1) * 256) / zpow);
+    const lr = new google.maps.Point(((coord.x + 1) * 256) / zpow, (coord.y * 256) / zpow);
+    
+    const nw = proj.fromPointToLatLng(ul);
+    const se = proj.fromPointToLatLng(lr);
+    
+    const transform = function (latLng) {
+      const x = (latLng.lng() * 20037508.34) / 180;
+      let y = Math.log(Math.tan(((90 + latLng.lat()) * Math.PI) / 360)) / (Math.PI / 180);
+      y = (y * 20037508.34) / 180;
+      return { x: x, y: y };
+    };
+    
+    const minXY = transform(nw);
+    const maxXY = transform(se);
+    const bbox = `${minXY.x},${minXY.y},${maxXY.x},${maxXY.y}`;
 
-    </script>
+    const baseUrl = "https://www.safemap.go.kr/openApi2/IF_0087_WMS";
+    const url = `${baseUrl}?serviceKey=Y8MR9PWS-8KSX-8KSX-8KSX-8KSX0KBYX5` +
+                `&REQUEST=GetMap` +
+                `&STYLES=A2SM_CrmnlHspot_Tot_Tot` +
+                `&LAYERS=A2SM_CRMNLHSPOT_TOT` +
+                `&FORMAT=image/png` +
+                `&SRS=EPSG:3857` +
+                `&TRANSPARENT=TRUE` +
+                `&WIDTH=256` +
+                `&HEIGHT=256` +
+                `&BBOX=${bbox}`;
+                
+    return url;
+  },
+  tileSize: new google.maps.Size(256, 256),
+  isPng: true,
+  name: "범죄주의구간(전체)",
+  opacity: 0.6 
+});
+
+map.overlayMapTypes.push(crimeWmsLayer);
+
+  // 안심 구역
+  const safeZonePromise = fetch(
+    "https://api.odcloud.kr/api/15138232/v1/uddi:da0c6c93-f05a-453d-849f-e4c3697222e3?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c"
+  )
+    .then(res => res.json())
+    .then(data => {
+      data.data.forEach(place => {
+        const lat = parseFloat(place["X좌표"] || place["위도"]);
+        const lng = parseFloat(place["Y좌표"] || place["경도"]);
+        const name = place["안심구역명"] || place["지점명"] || "안심구역";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/10149/10149360.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🛡️ ${name}</strong><br>
+              ${place["주소"] || place["소재지도로명주소"] || "안심구역 지정 지역"}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  const safeZoneTwoPromise = fetch(
+    "https://api.odcloud.kr/api/15077036/v1/uddi:6b371c66-09a5-4efd-8445-bfd53672542e?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c"
+  )
+    .then(res => res.json())
+    .then(data => {
+      data.data.forEach(place => {
+        const lat = parseFloat(place["위도"] || place["X좌표"] || place["Y"]);
+        const lng = parseFloat(place["경도"] || place["Y좌표"] || place["X"]);
+        const name = place["안심구역명"] || place["귀가길명"] || place["지점명"] || "추가 안심구역";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/10149/10149360.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const address = place["소재지도로명주소"] || place["주소"] || place["위치설명"] || "안심구역 지정 지역";
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🛡️ ${name}</strong><br>
+              ${address}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  const safeZoneThreePromise = fetch(
+    "http://openapi.seoul.go.kr:8088/66664651456e617936334278784243/xml/womanSafeAreaInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("Y_COORD")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("X_COORD")[0]?.textContent);
+        const name = place.getElementsByTagName("ANSM_ZIP_NM")[0]?.textContent || "여성안심지킴이집";
+        const address = place.getElementsByTagName("ADDR_OLD")[0]?.textContent || "주소 정보 없음";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/10149/10149360.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🛡️ ${name}</strong><br>
+              <small style="color: #666; font-weight: bold;">(여성안심지킴이집)</small><br>
+              ${address}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  const safeZoneFourPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/43444846746e61793639686d594859/xml/TbHospitalInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("X_CODE")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("Y_CODE")[0]?.textContent);
+        const name = place.getElementsByTagName("NAME")[0]?.textContent || "안심 병원";
+        const address = place.getElementsByTagName("ADDR")[0]?.textContent || "주소 정보 없음";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/10149/10149360.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🛡️ ${name}</strong><br>
+              <small style="color: #0076ff; font-weight: bold;">(의료 안심구역)</small><br>
+              ${address}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 대중교통
+  const transitPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/4f4c7650476e617936395270616b6c/xml/busStopLocationXyInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("WGS84_Y")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("WGS84_X")[0]?.textContent);
+        const name = place.getElementsByTagName("STOP_NM")[0]?.textContent || "버스정류소";
+        const stopId = place.getElementsByTagName("ARS_ID")[0]?.textContent || "";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🚌 ${name}</strong><br>
+              ${stopId ? `<small style="color: #666; font-weight: bold;">정류소 번호: ${stopId}</small>` : ''}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  const transitSubwayPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/534f534b4a6e61793130325270747942/xml/SearchSTNBySubwayLineInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("XPOINT_WGS")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("YPOINT_WGS")[0]?.textContent);
+        const name = place.getElementsByTagName("STATION_NM")[0]?.textContent || "지하철역";
+        const lineNum = place.getElementsByTagName("LINE_NUM")[0]?.textContent || "";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: `${name} (${lineNum})`,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🚌 ${name}역</strong><br>
+              ${lineNum ? `<small style="color: #ff6e00; font-weight: bold;">${lineNum}</small>` : ''}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 따릉이 대여소
+  const bikePromise = fetch(
+    "http://openapi.seoul.go.kr:8088/4c65626d506e61793631546e515355/xml/tbCycleStationInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("STA_LAT")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("STA_LONG")[0]?.textContent);
+        const name = place.getElementsByTagName("RENT_NO_NM")[0]?.textContent || "따릉이 대여소";
+        const bikeCount = place.getElementsByTagName("STA_ADD1")[0]?.textContent || "";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/2972/2972185.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🚲 ${name}</strong><br>
+              ${bikeCount ? `<small style="color: #666;">${bikeCount}</small>` : ''}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 공사장·공폐가
+  const constructionPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/75444258526e61793130315579785173/xml/TnCnwInfoView/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("LAT")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("LOT")[0]?.textContent);
+        const name = place.getElementsByTagName("CNST_NM")[0]?.textContent || "공사장/공폐가";
+        const address = place.getElementsByTagName("ADDR")[0]?.textContent || "주소 정보 없음";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/7521/7521191.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>⚠️ ${name}</strong><br>
+              <small style="color: #d9381e; font-weight: bold;">(공사장/공폐가 구역)</small><br>
+              ${address}
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  const constructionTwoPromise = fetch(
+    "http://openapi.seoul.go.kr:8088/654c7a61436e61793736634d554a45/xml/ListOnePMISBizInfo/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("LAT")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("LOT")[0]?.textContent);
+        const name = place.getElementsByTagName("BIZ_NM")[0]?.textContent || "서울시 공사현장";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/7521/7521191.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>⚠️ ${name}</strong><br>
+              <small style="color: #d9381e; font-weight: bold;">(건설알림이 공사구역)</small>
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // 어린이 보호 구역
+  const schoolZonePromise = fetch(
+    "http://openapi.seoul.go.kr:8088/48574971486e6179393542546d4168/xml/TgAcdt19/1/5/"
+  )
+    .then(res => res.text())
+    .then(xmlString => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      const rows = xmlDoc.getElementsByTagName("row");
+      Array.from(rows).forEach(place => {
+        const lat = parseFloat(place.getElementsByTagName("X_COORD")[0]?.textContent);
+        const lng = parseFloat(place.getElementsByTagName("Y_COORD")[0]?.textContent);
+        const name = place.getElementsByTagName("SPOT_NM")[0]?.textContent || "어린이 보호구역";
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: name,
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/9856/9856787.png",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px;">
+              <strong>🧒 ${name}</strong><br>
+              <small style="color: #e6a100; font-weight: bold;">(어린이 보호구역 지정지점)</small>
+            </div>
+          `
+        });
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend({ lat, lng });
+      });
+    });
+
+  // ✅ 지도 범위 자동 조절 (오류 수정: 실제 선언된 Promise 변수로 교체)
+  Promise.all([
+    streetlightPromise,
+    peopleUpPromise,
+    peopleDownPromise,
+    safeZonePromise,
+    safeZoneTwoPromise,
+    safeZoneThreePromise,
+    safeZoneFourPromise,
+    transitPromise,
+    transitSubwayPromise,
+    bikePromise,
+    constructionPromise,
+    constructionTwoPromise,
+    schoolZonePromise
+  ])
+  .then(() => {
+    if (!bounds.isEmpty()) {
+      map.fitBounds(bounds);
+    }
+  })
+  .catch(err => {
+    console.error("API 오류:", err);
+  });
+
+}
+</script>
+
+<!-- ✅ 구글 맵 API -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+</script>
+
 </body>
 </html>

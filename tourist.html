@@ -1,114 +1,433 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관광 안전 지도</title>
-    <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f5f6f7;
-        }
-        .header-bar {
-            width: 800px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-        #map {
-            width: 800px;
-            height: 550px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>서울 관광지 안내 지도</title>
+
+<style>
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f6f7;
+}
+
+.header-bar {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+/* 언어 선택 버튼 스타일 */
+.lang-container {
+  width: 800px;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+.lang-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.lang-btn.active {
+  background-color: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+/* 카테고리 필터 컨트롤러 스타일 */
+.filter-container {
+  width: 800px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.filter-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 18px;
+  border-radius: 30px;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 카테고리별 활성화 색상 상징 */
+.filter-btn[data-category="tradition"].active { background-color: #e67e22; color: #fff; border-color: #d35400; }
+.filter-btn[data-category="modern"].active { background-color: #3498db; color: #fff; border-color: #2980b9; }
+.filter-btn[data-category="nature"].active { background-color: #2ecc71; color: #fff; border-color: #27ae60; }
+.filter-btn[data-category="energy"].active { background-color: #9b59b6; color: #fff; border-color: #8e44ad; }
+
+#map {
+  width: 800px;
+  height: 550px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.map-wrapper {
+  position: relative;
+  width: 800px;
+}
+
+.legend {
+  width: 800px;
+  margin-top: 15px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-sizing: border-box;
+}
+
+.legend h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,0.15);
+}
+
+@media (max-width: 850px) {
+  .header-bar, .lang-container, .filter-container, .map-wrapper, #map, .legend {
+    width: 95%;
+  }
+  #map { height: 450px; }
+  .legend-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="header-bar">
-        <!-- 8개 파일마다 이 제목을 각각 다르게 적어주시면 됩니다 -->
-        <h2 id="mapTitle">관광 안전 지도</h2>
-        <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+<div class="header-bar">
+  <h2 id="txt-title">서울 명소 관광 지도</h2>
+  <button class="back-btn" id="txt-home" onclick="location.href='index.html'">🏠 홈으로</button>
+</div>
+
+<!-- 언어 선택 버튼 바 -->
+<div class="lang-container">
+  <button class="lang-btn active" data-lang="ko" onclick="changeLanguage('ko')">한국어</button>
+  <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">English</button>
+  <button class="lang-btn" data-lang="ja" onclick="changeLanguage('ja')">日本語</button>
+  <button class="lang-btn" data-lang="zh" onclick="changeLanguage('zh')">简体中文</button>
+</div>
+
+<!-- 카테고리 필터 버튼 영역 -->
+<div class="filter-container">
+  <div class="filter-title" id="txt-filter-title">🔎 보고 싶은 카테고리를 선택하세요 (중복 선택 가능)</div>
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-category="tradition" id="btn-tradition" onclick="toggleCategory('tradition')">🏯 전통·역사</button>
+    <button class="filter-btn active" data-category="modern" id="btn-modern" onclick="toggleCategory('modern')">🌆 현대·도심</button>
+    <button class="filter-btn active" data-category="nature" id="btn-nature" onclick="toggleCategory('nature')">🌿 자연·힐링</button>
+    <button class="filter-btn active" data-category="energy" id="btn-energy" onclick="toggleCategory('energy')">⚡ 쇼핑·엔터(에너지)</button>
+  </div>
+</div>
+
+<div class="map-wrapper">
+  <div id="map"></div>
+</div>
+
+<!-- 하단 범례 안내 -->
+<div class="legend">
+  <h3 id="txt-legend-title">📍 카테고리별 마커 안내</h3>
+  <div class="legend-grid">
+    <div class="legend-item" id="txt-leg-tradition">
+      <div class="legend-dot" style="background:#e67e22;"></div>
+      <span>🏯 전통·역사 명소 (경복궁, 북촌 한옥마을 등)</span>
     </div>
+    <div class="legend-item" id="txt-leg-modern">
+      <div class="legend-dot" style="background:#3498db;"></div>
+      <span>🌆 현대·도심 명소 (N서울타워, 명동 등)</span>
+    </div>
+    <div class="legend-item" id="txt-leg-nature">
+      <div class="legend-dot" style="background:#2ecc71;"></div>
+      <span>🌿 자연·힐링 명소 (한강공원, 서울숲 등)</span>
+    </div>
+    <div class="legend-item" id="txt-leg-energy">
+      <div class="legend-dot" style="background:#9b59b6;"></div>
+      <span>⚡ 쇼핑·엔터 명소 (롯데월드, 홍대 등)</span>
+    </div>
+  </div>
+</div>
 
-    <div id="map"></div>
+<!-- 1. 외부 다국어 데이터 파일 연동 (반드시 지도 로딩 전에 위치해야 합니다) -->
+<script src="language.js"></script>
 
-    <script>
-        function initMap() {
-            // 이 페이지의 기본 카메라 중심 좌표
-            const defaultCenter = { lat: 37.566535, lng: 126.977969 };
-            
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 14,
-                center: defaultCenter,
-            });
+<!-- 2. 지도 및 페이지 제어 메인 스크립트 -->
+<script>
+// 만약 외부 language.js가 없거나 비어있을 경우를 대비한 가상/안전 데이터 바인딩
+if (typeof LANGUAGES === 'undefined') {
+  var LANGUAGES = {
+    ko: {
+      title: "서울 명소 관광 지도", home: "🏠 홈으로", filterTitle: "🔎 보고 싶은 카테고리를 선택하세요 (중복 선택 가능)",
+      catTradition: "🏯 전통·역사", catModern: "🌆 현대·도심", catNature: "🌿 자연·힐링", catEnergy: "⚡ 쇼핑·엔터(에너지)",
+      legendTitle: "📍 카테고리별 마커 안내",
+      legendTradition: "🏯 전통·역사 명소 (경복궁, 북촌 한옥마을 등)",
+      legendModern: "🌆 현대·도심 명소 (N서울타워, 명동 등)",
+      legendNature: "🌿 자연·힐링 명소 (한강공원, 서울숲 등)",
+      legendEnergy: "⚡ 쇼핑·엔터 명소 (롯데월드, 홍대 등)",
+      tradition: [
+        { name: "경복궁", desc: "조선 왕조의 법궁이자 서울의 상징적인 문화유산" },
+        { name: "북촌 한옥마을", desc: "도심 속 실제 주민들이 거주하는 전통 한옥 보존 지역" },
+        { name: "창덕궁", desc: "자연과의 조화가 아름다운 유네스코 세계문화유산" },
+        { name: "인사동", desc: "전통 화랑, 고미술품, 전통찻집이 밀집한 문화의 거리" }
+      ],
+      modern: [
+        { name: "N서울타워", desc: "남산 정상에서 서울 시내를 한눈에 내려다보는 전망대" },
+        { name: "명동", desc: "트렌디한 쇼핑몰과 다양한 길거리 음식을 즐길 수 있는 번화가" },
+        { name: "동대문디자인플라자 (DDP)", desc: "독창적인 디자인과 다양한 전시가 열리는 복합문화공간" },
+        { name: "강남역", desc: "트렌드와 엔터테인먼트, 고층 빌딩이 밀집한 핫플레이스" }
+      ],
+      nature: [
+        { name: "반포 한강공원", desc: "달빛무지개분수와 시원한 강바람을 즐길 수 있는 휴식처" },
+        { name: "남산공원", desc: "사계절 아름다운 산책로와 자연을 품은 서울 중심의 공원" },
+        { name: "서울숲", desc: "문화예술공원, 생태숲 등 다양한 테마로 꾸며진 녹색 쉼터" },
+        { name: "북한산국립공원", desc: "도심 속 웅장한 바위산과 수려한 경관을 자랑하는 국립공원" }
+      ],
+      energy: [
+        { name: "롯데월드", desc: "모험과 신비가 가득한 대형 실내외 테마파크" },
+        { name: "코엑스 스타필드", desc: "별마당도서관과 쇼핑, 아쿠아리움이 결합된 대형 몰" },
+        { name: "홍대거리", desc: "젊음의 에너지와 버스킹, 독특한 인디 문화가 가득한 곳" },
+        { name: "이태원", desc: "다양한 세계 문화와 이국적인 맛집들이 모여있는 특구" }
+      ]
+    }
+  };
+}
 
-            // ========================================================
-            // [데이터 구역] 이 페이지에만 표시될 다중 마커 배열
-            // 각 파일마다 원하는 마커 이름과 위도, 경도를 자유롭게 적으세요.
-            // ========================================================
-            const safetyPlaces = [
-                { title: "어린이 보호구역 A", lat: 37.5668, lng: 126.9723 },
-                { title: "아동 안심 지킴이집 B", lat: 37.5715, lng: 126.9768 },
-                { title: "어린이 보행 안전구역 C", lat: 37.5651, lng: 126.9760 }
-            ];
+// 고정 좌표 설정 데이터
+const COORDINATES = {
+  tradition: [{lat: 37.5796, lng: 126.9770}, {lat: 37.5829, lng: 126.9835}, {lat: 37.5826, lng: 126.9921}, {lat: 37.5717, lng: 126.9860}],
+  modern: [{lat: 37.5512, lng: 126.9882}, {lat: 37.5635, lng: 126.9815}, {lat: 37.5668, lng: 127.0094}, {lat: 37.4979, lng: 127.0276}],
+  nature: [{lat: 37.5114, lng: 126.9944}, {lat: 37.5538, lng: 126.9818}, {lat: 37.5443, lng: 127.0374}, {lat: 37.6614, lng: 126.9926}],
+  energy: [{lat: 37.5111, lng: 127.0982}, {lat: 37.5113, lng: 127.0590}, {lat: 37.5562, lng: 126.9227}, {lat: 37.5345, lng: 126.9942}]
+};
 
-            // 배열에 담긴 데이터만큼 지도에 마커를 생성합니다
-            safetyPlaces.forEach((place) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: place.lat, lng: place.lng },
-                    map: map,
-                    title: place.title
-                });
+const CATEGORY_COLORS = { tradition: "#e67e22", modern: "#3498db", nature: "#2ecc71", energy: "#9b59b6" };
 
-                const infowindow = new google.maps.InfoWindow({
-                    content: `<div style="padding:10px; color:#333;">
-                                <strong>${place.title}</strong><br>
-                                안심 안전 서비스를 지원하는 위치입니다.
-                              </div>`
-                });
+// 상태 관리 전역 변수
+let map;
+let activeInfoWindow = null;
+let currentLang = "ko";
 
-                marker.addListener("click", () => {
-                    infowindow.open(map, marker);
-                });
-            });
+const categoryMarkers = { tradition: [], modern: [], nature: [], energy: [] };
+const categoryState = { tradition: true, modern: true, nature: true, energy: true };
 
-            // 데이터가 있다면 첫 번째 마커 위치로 카메라를 이동합니다
-            if (safetyPlaces.length > 0) {
-                map.setCenter({ lat: safetyPlaces[0].lat, lng: safetyPlaces[0].lng });
-            }
-        }
-    </script>
+function makeMarkerIcon(color) {
+  return {
+    path: google.maps.SymbolPath.CIRCLE,
+    scale: 10,
+    fillColor: color,
+    fillOpacity: 0.9,
+    strokeColor: "#ffffff",
+    strokeWeight: 2,
+  };
+}
 
-    <!-- 구글 맵 라이브러리 (YOUR_API_KEY_HERE 부분을 비워두었으니 발급받은 키를 넣으세요) -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-    </script>
+// 구글 지도 초기화 가동
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 12,
+    center: { lat: 37.5550, lng: 126.9900 },
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+  });
 
-    <script src="language.js"></script>
+  createAllMarkers();
+}
 
-    <script>
+// 마커 최초 빌드 생성 및 저장
+function createAllMarkers() {
+  Object.keys(COORDINATES).forEach(category => {
+    const color = CATEGORY_COLORS[category];
+    const icon = makeMarkerIcon(color);
 
-        applyLanguage("tourist");
+    COORDINATES[category].forEach((pos, index) => {
+      const marker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        icon: icon
+      });
 
-    </script>
+      // 동적 매칭 처리를 위해 마커 객체 내부에 카테고리와 인덱스 속성 추가 보관
+      marker.customCategory = category;
+      marker.customIndex = index;
+
+      categoryMarkers[category].push(marker);
+    });
+  });
+
+  // 지도 인프라 구성 후 현재 선택 언어('ko') 기준으로 텍스트 주입
+  updateMapLanguage();
+}
+
+// 언어 변경 처리 메인 액션 함수
+function changeLanguage(lang) {
+  if (!LANGUAGES[lang]) return; // 대상 언어팩 데이터가 존재하지 않을 시 안전 예외 처리
+  currentLang = lang;
+
+  // 버튼 활성화 클래스 토글 제어
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    if (btn.getAttribute('data-lang') === lang) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  updateMapLanguage();
+}
+
+// 화면 UI 레이아웃 요소와 마커 정보창 텍스트를 실시간 일괄 갱신하는 코어 함수
+function updateMapLanguage() {
+  const data = LANGUAGES[currentLang];
+  if (!data) return;
+
+  // 1. 순수 텍스트 영역 다국어 맵핑 변경
+  if (document.getElementById("txt-title")) document.getElementById("txt-title").innerText = data.title;
+  if (document.getElementById("txt-home")) document.getElementById("txt-home").innerText = data.home;
+  if (document.getElementById("txt-filter-title")) document.getElementById("txt-filter-title").innerText = data.filterTitle;
+  if (document.getElementById("txt-legend-title")) document.getElementById("txt-legend-title").innerText = data.legendTitle;
+
+  // 2. 카테고리 필터링 버튼 텍스트 변경
+  if (document.getElementById("btn-tradition")) document.getElementById("btn-tradition").innerText = data.catTradition;
+  if (document.getElementById("btn-modern")) document.getElementById("btn-modern").innerText = data.catModern;
+  if (document.getElementById("btn-nature")) document.getElementById("btn-nature").innerText = data.catNature;
+  if (document.getElementById("btn-energy")) document.getElementById("btn-energy").innerText = data.catEnergy;
+
+  // 3. 하단 범례 구역 디자인 레이아웃 문자열 동적 적용
+  if (document.getElementById("txt-leg-tradition")) document.getElementById("txt-leg-tradition").querySelector('span').innerText = data.legendTradition;
+  if (document.getElementById("txt-leg-modern")) document.getElementById("txt-leg-modern").querySelector('span').innerText = data.legendModern;
+  if (document.getElementById("txt-leg-nature")) document.getElementById("txt-leg-nature").querySelector('span').innerText = data.legendNature;
+  if (document.getElementById("txt-leg-energy")) document.getElementById("txt-leg-energy").querySelector('span').innerText = data.legendEnergy;
+
+  // 4. 정보창 닫기 초기화
+  if (activeInfoWindow) activeInfoWindow.close();
+
+  // 5. 마커 클릭 리스너 재정의 및 다국어 맵 보정 
+  Object.keys(categoryMarkers).forEach(category => {
+    const color = CATEGORY_COLORS[category];
+    const placesList = data[category]; // 해당 국가별 카테고리 배열 목록 로드
+
+    categoryMarkers[category].forEach((marker) => {
+      // 기존 등록되어 있던 이벤트 무력화
+      google.maps.event.clearInstanceListeners(marker);
+
+      const placeInfo = placesList[marker.customIndex];
+      if (placeInfo) {
+        const infoWindow = new google.maps.InfoWindow({
+          content: `
+            <div style="padding:10px; font-family:'Malgun Gothic',sans-serif; color:#333; line-height: 1.5; max-width:200px;">
+              <strong style="font-size:15px; color:${color};">${placeInfo.name}</strong><br>
+              <p style="margin:5px 0 0 0; font-size:12px; color:#666;">${placeInfo.desc}</p>
+            </div>
+          `
+        });
+
+        marker.addListener("click", () => {
+          if (activeInfoWindow) activeInfoWindow.close();
+          infoWindow.open(map, marker);
+          activeInfoWindow = infoWindow;
+        });
+      }
+    });
+  });
+}
+
+// 카테고리 On/Off 가시성 토글 기능
+function toggleCategory(category) {
+  const btn = document.querySelector(`.filter-btn[data-category="${category}"]`);
+  categoryState[category] = !categoryState[category];
+  
+  if (categoryState[category]) {
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
+
+  categoryMarkers[category].forEach(marker => {
+    marker.setMap(categoryState[category] ? map : null);
+  });
+
+  if (!categoryState[category] && activeInfoWindow) {
+    activeInfoWindow.close();
+  }
+}
+</script>
+
+<!-- 구글맵 API 원본 로딩 라인 유지 -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+</script>
+
 </body>
 </html>

@@ -225,6 +225,31 @@ button:hover {
     box-shadow: 0 8px 20px rgba(79,124,255,0.3);
 }
 
+/* 언어 선택 컨트롤러 스타일 */
+.lang-container {
+  width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.lang-btn {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.lang-btn.active {
+  background-color: #333;
+  color: #fff;
+  border-color: #333;
+  font-weight: bold;
+}
+
 
 
 /* 모바일 */
