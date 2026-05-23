@@ -102,210 +102,76 @@ body {
 <body>
 
 <div class="header-bar">
-
   <h2 id="pageTitle">일반(성인) 안전 지도</h2>
 
-  <button class="back-btn"
-    id="homeBtn"
-    onclick="location.href='index.html'">
+  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">
     🏠 홈으로
   </button>
-
 </div>
 
 <div id="map"></div>
 
-<!-- ✅ 범례 -->
 <div class="legend">
-
   <h3 id="legendTitle">📍 지도 마커 안내</h3>
 
-  <div class="legend-grid">
+  <div class="legend-grid legend-list">
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/149/149852.png">
-      <div class="legend-text" id="cctvText">
-        📷 CCTV 설치 위치
-      </div>
+      <span class="legend-text" id="cctvText">📷 CCTV 설치 위치</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-      <div class="legend-text" id="streetText">
-        💡 가로등 위치
-      </div>
+      <span class="legend-text" id="streetText">💡 가로등 위치</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
-      <div class="legend-text" id="crowdHighText">
-        👥 유동인구 많은 곳
-      </div>
+      <span class="legend-text" id="crowdHighText">👥 유동인구 많은 곳</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
-      <div class="legend-text" id="crowdLowText">
-        🚶 유동인구 적은 곳
-      </div>
+      <span class="legend-text" id="crowdLowText">🚶 유동인구 적은 곳</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/296/296216.png">
-      <div class="legend-text" id="accidentText">
-        🚗 교통사고 다발 구역
-      </div>
+      <span class="legend-text" id="accidentText">🚗 교통사고 다발 구역</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
-      <div class="legend-text" id="crimeText">
-        ⚠️ 범죄 발생 구역
-      </div>
+      <span class="legend-text" id="crimeText">⚠️ 범죄 발생 구역</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <div class="legend-text" id="hospitalText">
-        🏥 병원
-      </div>
+      <span class="legend-text" id="hospitalText">🏥 병원</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <div class="legend-text" id="fireText">
-        🚒 소방서
-      </div>
+      <span class="legend-text" id="fireText">🚒 소방서</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-      <div class="legend-text" id="policeText">
-        👮 경찰서
-      </div>
+      <span class="legend-text" id="policeText">👮 경찰서</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/619/619153.png">
-      <div class="legend-text" id="shelterText">
-        🏠 지킴이집
-      </div>
+      <span class="legend-text" id="shelterText">🏠 지킴이집</span>
     </div>
 
   </div>
-
 </div>
-
-<!-- ✅ language.js -->
-<script src="language.js"></script>
-
-<script>
-// 저장된 언어 불러오기
-const lang = localStorage.getItem("language") || "ko";
-
-// 언어별 텍스트
-const textData = {
-
-  ko: {
-    title: "일반(성인) 안전 지도",
-    home: "🏠 홈으로",
-    legend: "📍 지도 마커 안내",
-    cctv: "📷 CCTV 설치 위치",
-    street: "💡 가로등 위치",
-    crowdHigh: "👥 유동인구 많은 곳",
-    crowdLow: "🚶 유동인구 적은 곳",
-    accident: "🚗 교통사고 다발 구역",
-    crime: "⚠️ 범죄 발생 구역",
-    hospital: "🏥 병원",
-    fire: "🚒 소방서",
-    police: "👮 경찰서",
-    shelter: "🏠 지킴이집"
-  },
-
-  en: {
-    title: "Adult Safety Map",
-    home: "🏠 Home",
-    legend: "📍 Map Marker Guide",
-    cctv: "📷 CCTV Locations",
-    street: "💡 Street Lights",
-    crowdHigh: "👥 Crowded Areas",
-    crowdLow: "🚶 Quiet Areas",
-    accident: "🚗 Accident-Prone Areas",
-    crime: "⚠️ Crime Areas",
-    hospital: "🏥 Hospitals",
-    fire: "🚒 Fire Stations",
-    police: "👮 Police Stations",
-    shelter: "🏠 Safe Houses"
-  },
-
-  ja: {
-    title: "一般(成人)安全マップ",
-    home: "🏠 ホーム",
-    legend: "📍 地図マーカー案内",
-    cctv: "📷 CCTV設置場所",
-    street: "💡 街灯位置",
-    crowdHigh: "👥 人通りの多い場所",
-    crowdLow: "🚶 人通りの少ない場所",
-    accident: "🚗 交通事故多発地域",
-    crime: "⚠️ 犯罪発生地域",
-    hospital: "🏥 病院",
-    fire: "🚒 消防署",
-    police: "👮 警察署",
-    shelter: "🏠 安全ハウス"
-  },
-
-  zh: {
-    title: "成人安全地图",
-    home: "🏠 首页",
-    legend: "📍 地图标记说明",
-    cctv: "📷 CCTV位置",
-    street: "💡 路灯位置",
-    crowdHigh: "👥 人流量大的地区",
-    crowdLow: "🚶 人流量少的地区",
-    accident: "🚗 交通事故多发区",
-    crime: "⚠️ 犯罪高发区",
-    hospital: "🏥 医院",
-    fire: "🚒 消防局",
-    police: "👮 警察局",
-    shelter: "🏠 安全之家"
-  }
-
-};
-
-const t = textData[lang];
-
-// 제목
-document.getElementById("pageTitle").innerText = t.title;
-document.getElementById("pageTitleTag").innerText = t.title;
-
-// 버튼
-document.getElementById("homeBtn").innerText = t.home;
-
-// 범례
-document.getElementById("legendTitle").innerText = t.legend;
-
-document.getElementById("cctvText").innerText = t.cctv;
-document.getElementById("streetText").innerText = t.street;
-document.getElementById("crowdHighText").innerText = t.crowdHigh;
-document.getElementById("crowdLowText").innerText = t.crowdLow;
-document.getElementById("accidentText").innerText = t.accident;
-document.getElementById("crimeText").innerText = t.crime;
-document.getElementById("hospitalText").innerText = t.hospital;
-document.getElementById("fireText").innerText = t.fire;
-document.getElementById("policeText").innerText = t.police;
-document.getElementById("shelterText").innerText = t.shelter;
-</script>
-
-<!-- ✅ 구글 맵 API -->
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-</script>
 
 <script>
 let map;
-
 function initMap() {
-
   map = new google.maps.Map(
     document.getElementById("map"),
     {
@@ -316,9 +182,12 @@ function initMap() {
       }
     }
   );
-
 }
 </script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+<script src="language.js"></script>
 
 </body>
 </html>

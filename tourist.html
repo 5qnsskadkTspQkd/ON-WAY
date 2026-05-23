@@ -173,7 +173,6 @@ body {
   <button class="back-btn" id="txt-home" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
-<!-- 언어 선택 버튼 바 -->
 <div class="lang-container">
   <button class="lang-btn active" data-lang="ko" onclick="changeLanguage('ko')">한국어</button>
   <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">English</button>
@@ -181,7 +180,6 @@ body {
   <button class="lang-btn" data-lang="zh" onclick="changeLanguage('zh')">简体中文</button>
 </div>
 
-<!-- 카테고리 필터 버튼 영역 -->
 <div class="filter-container">
   <div class="filter-title" id="txt-filter-title">🔎 보고 싶은 카테고리를 선택하세요 (중복 선택 가능)</div>
   <div class="filter-buttons">
@@ -196,7 +194,6 @@ body {
   <div id="map"></div>
 </div>
 
-<!-- 하단 범례 안내 -->
 <div class="legend">
   <h3 id="txt-legend-title">📍 카테고리별 마커 안내</h3>
   <div class="legend-grid">
@@ -219,12 +216,9 @@ body {
   </div>
 </div>
 
-<!-- 1. 외부 다국어 데이터 파일 연동 (반드시 지도 로딩 전에 위치해야 합니다) -->
 <script src="language.js"></script>
 
-<!-- 2. 지도 및 페이지 제어 메인 스크립트 -->
 <script>
-// 만약 외부 language.js가 없거나 비어있을 경우를 대비한 가상/안전 데이터 바인딩
 if (typeof LANGUAGES === 'undefined') {
   var LANGUAGES = {
     ko: {
@@ -263,7 +257,6 @@ if (typeof LANGUAGES === 'undefined') {
   };
 }
 
-// 고정 좌표 설정 데이터
 const COORDINATES = {
   tradition: [{lat: 37.5796, lng: 126.9770}, {lat: 37.5829, lng: 126.9835}, {lat: 37.5826, lng: 126.9921}, {lat: 37.5717, lng: 126.9860}],
   modern: [{lat: 37.5512, lng: 126.9882}, {lat: 37.5635, lng: 126.9815}, {lat: 37.5668, lng: 127.0094}, {lat: 37.4979, lng: 127.0276}],
@@ -273,7 +266,6 @@ const COORDINATES = {
 
 const CATEGORY_COLORS = { tradition: "#e67e22", modern: "#3498db", nature: "#2ecc71", energy: "#9b59b6" };
 
-// 상태 관리 전역 변수
 let map;
 let activeInfoWindow = null;
 let currentLang = "ko";
@@ -281,6 +273,7 @@ let currentLang = "ko";
 const categoryMarkers = { tradition: [], modern: [], nature: [], energy: [] };
 const categoryState = { tradition: true, modern: true, nature: true, energy: true };
 
+// [교정] 구글 지도가 로드된 후 실행될 수 있도록 안전한 구조로 은닉
 function makeMarkerIcon(color) {
   return {
     path: google.maps.SymbolPath.CIRCLE,
@@ -292,7 +285,6 @@ function makeMarkerIcon(color) {
   };
 }
 
-// 구글 지도 초기화 가동
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
@@ -305,11 +297,10 @@ function initMap() {
   createAllMarkers();
 }
 
-// 마커 최초 빌드 생성 및 저장
 function createAllMarkers() {
   Object.keys(COORDINATES).forEach(category => {
     const color = CATEGORY_COLORS[category];
-    const icon = makeMarkerIcon(color);
+    const icon = makeMarkerIcon(color); // google 객체 로드 후 실행되므로 안심!
 
     COORDINATES[category].forEach((pos, index) => {
       const marker = new google.maps.Marker({
@@ -318,7 +309,6 @@ function createAllMarkers() {
         icon: icon
       });
 
-      // 동적 매칭 처리를 위해 마커 객체 내부에 카테고리와 인덱스 속성 추가 보관
       marker.customCategory = category;
       marker.customIndex = index;
 
@@ -326,16 +316,13 @@ function createAllMarkers() {
     });
   });
 
-  // 지도 인프라 구성 후 현재 선택 언어('ko') 기준으로 텍스트 주입
   updateMapLanguage();
 }
 
-// 언어 변경 처리 메인 액션 함수
 function changeLanguage(lang) {
-  if (!LANGUAGES[lang]) return; // 대상 언어팩 데이터가 존재하지 않을 시 안전 예외 처리
+  if (!LANGUAGES[lang]) return; 
   currentLang = lang;
 
-  // 버튼 활성화 클래스 토글 제어
   document.querySelectorAll('.lang-btn').forEach(btn => {
     if (btn.getAttribute('data-lang') === lang) {
       btn.classList.add('active');
@@ -347,39 +334,32 @@ function changeLanguage(lang) {
   updateMapLanguage();
 }
 
-// 화면 UI 레이아웃 요소와 마커 정보창 텍스트를 실시간 일괄 갱신하는 코어 함수
 function updateMapLanguage() {
   const data = LANGUAGES[currentLang];
   if (!data) return;
 
-  // 1. 순수 텍스트 영역 다국어 맵핑 변경
   if (document.getElementById("txt-title")) document.getElementById("txt-title").innerText = data.title;
   if (document.getElementById("txt-home")) document.getElementById("txt-home").innerText = data.home;
   if (document.getElementById("txt-filter-title")) document.getElementById("txt-filter-title").innerText = data.filterTitle;
   if (document.getElementById("txt-legend-title")) document.getElementById("txt-legend-title").innerText = data.legendTitle;
 
-  // 2. 카테고리 필터링 버튼 텍스트 변경
   if (document.getElementById("btn-tradition")) document.getElementById("btn-tradition").innerText = data.catTradition;
   if (document.getElementById("btn-modern")) document.getElementById("btn-modern").innerText = data.catModern;
   if (document.getElementById("btn-nature")) document.getElementById("btn-nature").innerText = data.catNature;
   if (document.getElementById("btn-energy")) document.getElementById("btn-energy").innerText = data.catEnergy;
 
-  // 3. 하단 범례 구역 디자인 레이아웃 문자열 동적 적용
   if (document.getElementById("txt-leg-tradition")) document.getElementById("txt-leg-tradition").querySelector('span').innerText = data.legendTradition;
   if (document.getElementById("txt-leg-modern")) document.getElementById("txt-leg-modern").querySelector('span').innerText = data.legendModern;
   if (document.getElementById("txt-leg-nature")) document.getElementById("txt-leg-nature").querySelector('span').innerText = data.legendNature;
   if (document.getElementById("txt-leg-energy")) document.getElementById("txt-leg-energy").querySelector('span').innerText = data.legendEnergy;
 
-  // 4. 정보창 닫기 초기화
   if (activeInfoWindow) activeInfoWindow.close();
 
-  // 5. 마커 클릭 리스너 재정의 및 다국어 맵 보정 
   Object.keys(categoryMarkers).forEach(category => {
     const color = CATEGORY_COLORS[category];
-    const placesList = data[category]; // 해당 국가별 카테고리 배열 목록 로드
+    const placesList = data[category]; 
 
     categoryMarkers[category].forEach((marker) => {
-      // 기존 등록되어 있던 이벤트 무력화
       google.maps.event.clearInstanceListeners(marker);
 
       const placeInfo = placesList[marker.customIndex];
@@ -403,7 +383,6 @@ function updateMapLanguage() {
   });
 }
 
-// 카테고리 On/Off 가시성 토글 기능
 function toggleCategory(category) {
   const btn = document.querySelector(`.filter-btn[data-category="${category}"]`);
   categoryState[category] = !categoryState[category];
@@ -424,7 +403,6 @@ function toggleCategory(category) {
 }
 </script>
 
-<!-- 구글맵 API 원본 로딩 라인 유지 -->
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
 </script>

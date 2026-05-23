@@ -202,12 +202,7 @@ body {
   </div>
 </div>
 
-<!-- ✅ language.js -->
 <script src="language.js"></script>
-<script>
-  applyLanguage("elder");
-</script>
-
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 
 <script>
@@ -231,6 +226,7 @@ let map;
 let loadedCount = 0;
 const totalLayers = Object.keys(FILES).length;
 const errors = [];
+let ICONS = {}; // 구글 SDK 바인딩 지연 에러를 막기 위해 초기 객체만 비워둠
 
 function makeCircleIcon(color, size = 7) {
   return {
@@ -243,18 +239,19 @@ function makeCircleIcon(color, size = 7) {
   };
 }
 
-const ICONS = {
-  bench:       makeCircleIcon("#ff8f00", 7),
-  toilet:      makeCircleIcon("#00838f", 7),
-  flatroad:    makeCircleIcon("#66bb6a", 7),
-  elevator:    makeCircleIcon("#1e88e5", 8),
-  escalator:   makeCircleIcon("#42a5f5", 7),
-  ramp:        makeCircleIcon("#7b9ed9", 7),
-  medical:     makeCircleIcon("#e53935", 9),
-  coolshelter: makeCircleIcon("#ef6c00", 8),
-};
-
 function initMap() {
+  // 구글 맵 API 로드가 완전히 완료된 이 시점에 스타일 서클 객체 빌드 (안전성 확보)
+  ICONS = {
+    bench:       makeCircleIcon("#ff8f00", 7),
+    toilet:      makeCircleIcon("#00838f", 7),
+    flatroad:    makeCircleIcon("#66bb6a", 7),
+    elevator:    makeCircleIcon("#1e88e5", 8),
+    escalator:   makeCircleIcon("#42a5f5", 7),
+    ramp:        makeCircleIcon("#7b9ed9", 7),
+    medical:     makeCircleIcon("#e53935", 9),
+    coolshelter: makeCircleIcon("#ef6c00", 8),
+  };
+
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 11,
     center: { lat: 37.5665, lng: 126.9780 },
@@ -262,12 +259,14 @@ function initMap() {
     streetViewControl: false,
     fullscreenControl: true,
   });
+  
   loadAllLayers();
 }
 
 function loadAllLayers() {
   updateLoadingText();
 
+  // 안전하게 동적 로드된 ICONS 스타일 매핑 연동
   const layers = [
     { key: "bench",       icon: ICONS.bench,       emoji: "🪑", label: "벤치·쉼터",            done: "벤치·쉼터" },
     { key: "toilet",      icon: ICONS.toilet,      emoji: "🚻", label: "화장실",               done: "화장실" },
@@ -350,6 +349,12 @@ function layerDone(name) {
       box.style.display = "block";
       box.innerHTML = `⚠️ 아래 파일을 찾을 수 없어요. HTML과 같은 폴더에 있는지 확인해주세요!<br><b>${errors.join(", ")}</b>`;
     }
+
+    // [성능 조율] 비동기 대용량 분할 로드가 완료된 마커 전체를 마커 클러스터러에 주입
+    if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+      const allMarkers = Object.values(layerMarkers).flat();
+      new markerClusterer.MarkerClusterer({ map, markers: allMarkers });
+    }
   }
 }
 
@@ -358,6 +363,13 @@ function updateLoadingText(lastName) {
     ? `[${loadedCount}/${totalLayers}] ${lastName} 데이터 로드 완료...`
     : "데이터를 불러오는 중입니다...";
 }
+
+// 브라우저가 화면 요소 구조(DOM)를 모두 렌더링한 직후 다국어 번역을 안전하게 주입
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof applyLanguage === "function") {
+    applyLanguage("elder");
+  }
+});
 </script>
 
 <script async defer

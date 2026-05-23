@@ -30,7 +30,8 @@ const translations = {
         },
         moveweak: { 
             title: "이동약자 안전 지도", 
-            markers: ["📷 CCTV 위치", "💡 가로등 위치", "👥 유동인구 많은 지역", "🚶 유동인구 적은지역", "⚠️ 교통사고 다발구역", "🛗 지하철 승강기 위치 및 가동 현황"]
+            // [수정] CCTV와 가로등 안내 텍스트 제거 (HTML 노출 인덱스와 1:1 대응)
+            markers: ["👥 유동인구 많은 지역", "🚶 유동인구 적은지역", "⚠️ 교통사고 다발구역", "🛗 지하철 승강기 위치 및 가동 현황"]
         },
         patient: { 
             title: "응급환자 안전 지도", 
@@ -61,7 +62,8 @@ const translations = {
         },
         moveweak: { 
             title: "Mobility Impaired Safety Map", 
-            markers: ["📷 CCTV Locations", "💡 Street Lights", "👥 Crowded Areas", "🚶 Quiet Areas", "⚠️ Accident-Prone Areas", "🛗 Subway Elevators & Operation Status"]
+            // [수정] 영문 데이터에서도 CCTV, Street Lights 제거
+            markers: ["👥 Crowded Areas", "🚶 Quiet Areas", "⚠️ Accident-Prone Areas", "🛗 Subway Elevators & Operation Status"]
         },
         patient: { 
             title: "Emergency Patient Safety Map", 
@@ -80,7 +82,7 @@ const translations = {
         },
         elder: { 
             title: "高齢者安全マップ", 
-            markers: ["🪑 ベンチ・休憩スペース", "🚶 平坦な道", "🔼 駅エスカレーター", "🏥 医療福祉施設", "🚻 トイレ", "🛗 駅エレベーター", "♿ 車椅子スロープ", "☀️ 猛暑シェルター"]
+            markers: ["🪑 ベン치・休憩スペース", "🚶 平坦な道", "🔼 駅エスカレーター", "🏥 医療福祉施設", "🚻 トイレ", "🛗 駅エレベーター", "♿ 車椅子スロープ", "☀️ 猛暑シェルター"]
         },
         pregnant: { 
             title: "妊産婦安全マップ", 
@@ -92,7 +94,8 @@ const translations = {
         },
         moveweak: { 
             title: "交通弱者安全マップ", 
-            markers: ["📷 CCTV設置場所", "💡 街灯位置", "👥 人通りの多い地域", "🚶 人通りの少ない地域", "⚠️ 交通事故多発地域", "🛗 駅エレベーター位置および稼働状況"]
+            // [수정] 일문 데이터에서도 CCTV, 街灯位置 제거
+            markers: ["👥 人通りの多い地域", "🚶 人通りの少ない地域", "⚠️ 交通事故多発地域", "🛗 駅エレベーター位置および稼働状況"]
         },
         patient: { 
             title: "救急患者安全マップ", 
@@ -123,7 +126,8 @@ const translations = {
         },
         moveweak: { 
             title: "行动不便者安全地图", 
-            markers: ["📷 CCTV位置", "💡 路灯位置", "👥 人流密集地区", "🚶 人流较少地区", "⚠️ 交通事故多发地区", "🛗 地铁电梯位置及运行状况"]
+            // [수정] 중문 데이터에서도 CCTV, 路灯位置 제거
+            markers: ["👥 人流密集地区", "🚶 人流较少地区", "⚠️ 交通事故多发地区", "🛗 地铁电梯位置及运行状况"]
         },
         patient: { 
             title: "急诊患者安全地图", 
@@ -205,7 +209,7 @@ const LANGUAGES = {
         legendTradition: "🏯 伝統・歴史名所（景福宮、北村韓屋村など）", legendModern: "🌆 現代・都市名所（Nソウルタワー、明洞など）",
         legendNature: "🌿 自然・癒やし名所（漢江公園、ソウルの森など）", legendEnergy: "⚡ ショッピング・エンタメ名所（ロッテワールド、弘大など）",
         tradition: [
-            { name: "景福宮", desc: "朝鮮王朝の正宮であり、ソウルを代表する象徴的な文化遺産。" },
+            { name: "景福宮", desc: "朝鮮王朝의 正宮であり、ソウルを代表する象徴的な文化遺産。" },
             { name: "北村韓屋村", desc: "実際の住民が暮らす、伝統的な韓屋が保存された人気の街並み。" },
             { name: "昌徳宮", desc: "自然との調和が見事な、ユネスコ世界文化遺産に登録された王宮。" },
             { name: "仁寺洞", desc: "伝統的な画廊、古美術品店、伝統茶屋が集まる文化の街。" }
@@ -213,7 +217,7 @@ const LANGUAGES = {
         modern: [
             { name: "Nソウルタワー", desc: "南山の山頂にそびえ立ち、ソウル市内を一望できる展望タワー。" },
             { name: "明洞", desc: "トレンド의 ショップや賑やかな屋台フードが楽しめるソウル最大の繁華街。" },
-            { name: "東大門デザインプラザ (DDP)", desc: "独創的なデザインの建築物で、様々な展示が行われる複合文化空間。" },
+            { name: "東大门デザインプラザ (DDP)", desc: "独創的なデザインの建築物で、様々な展示が行われる複合文化空間。" },
             { name: "江南駅", desc: "高層ビル、最新トレンド、エンターテインメントが集まるホットプレイス。" }
         ],
         nature: [
@@ -262,7 +266,6 @@ const LANGUAGES = {
     }
 };
 
-// [글로벌 환경 안전장치] 외부 지도 변수 선언 유무 예외처리
 if (typeof map === 'undefined') var map = null;
 if (typeof categoryMarkers === 'undefined') var categoryMarkers = null;
 if (typeof activeInfoWindow === 'undefined') var activeInfoWindow = null;
@@ -270,10 +273,8 @@ if (typeof CATEGORY_COLORS === 'undefined') {
     var CATEGORY_COLORS = { tradition: '#e67e22', modern: '#3498db', nature: '#2ecc71', energy: '#9b59b6' };
 }
 
-// Helper 함수: DOM 안전 갱신
 const setTxt = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 const setHtml = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-
 
 /**
  * ==========================================
@@ -281,7 +282,6 @@ const setHtml = (id, html) => { const el = document.getElementById(id); if (el) 
  * ==========================================
  */
 function applyLanguage(page) {
-    // [핵심 해결] 언제나 동기화된 전역 브라우저 메모리(localStorage) 값에서 언어 추출
     const lang = localStorage.getItem("language") || "ko";
     
     let activePage = page;
@@ -302,19 +302,17 @@ function applyLanguage(page) {
     const pageData = translations[lang][activePage];
     const commonData = translations[lang].common;
 
-    // 텍스트 매핑
     setTxt("pageTitle", pageData.title);
     setTxt("mapTitle", pageData.title);
     setTxt("legendTitle", commonData.legend);
     setTxt("homeBtn", commonData.home);
     setTxt("loadingText", commonData.loading);
 
-    // [버그 수정] 범례 마커 리스트 매핑 시, 안전 검증 절차 최적화
-    const markerElements = document.querySelectorAll(".legend-list li, .legend-item span, [id$='Text']");
+    // 하단 마커 배열 주입부 버그 방지 최적화
+    const markerElements = document.querySelectorAll(".legend-list li, .legend-item .legend-text, [id$='Text']");
     if (markerElements.length > 0 && pageData.markers) {
         let textIndex = 0;
         markerElements.forEach((element) => {
-            // 화면 렌더링 검증 조건 완화 및 순수 데이터 바인딩 보장
             if (pageData.markers[textIndex]) {
                 element.innerText = pageData.markers[textIndex];
                 textIndex++;
@@ -323,7 +321,6 @@ function applyLanguage(page) {
     }
 }
 
-
 /**
  * ==========================================
  * 4. [로직] 서울 명소 관광 지도 번역 시스템 (changeLanguage)
@@ -331,8 +328,6 @@ function applyLanguage(page) {
  */
 function changeLanguage(lang) {
     if (!LANGUAGES[lang]) return;
-    
-    // [핵심 해결] 유저가 선택한 언어 설정을 브라우저 메모리에 영구 보존하여 페이지 이동 시 유지되도록 함
     localStorage.setItem("language", lang);
 
     setTxt("txt-title", LANGUAGES[lang].title);
@@ -340,7 +335,6 @@ function changeLanguage(lang) {
     setTxt("txt-filter-title", LANGUAGES[lang].filterTitle);
     setTxt("txt-legend-title", LANGUAGES[lang].legendTitle);
   
-    // 카테고리 필터 버튼 텍스트 변경
     const categories = ['tradition', 'modern', 'nature', 'energy'];
     const emojis = { tradition: '🏯', modern: '🌆', nature: '🌿', energy: '⚡' };
     
@@ -352,13 +346,11 @@ function changeLanguage(lang) {
         }
     });
 
-    // 범례 안내 구역 동적 마킹
     setHtml("txt-leg-tradition", `<div class="legend-dot" style="background:#e67e22;"></div> ${LANGUAGES[lang].legendTradition}`);
     setHtml("txt-leg-modern", `<div class="legend-dot" style="background:#3498db;"></div> ${LANGUAGES[lang].legendModern}`);
     setHtml("txt-leg-nature", `<div class="legend-dot" style="background:#2ecc71;"></div> ${LANGUAGES[lang].legendNature}`);
     setHtml("txt-leg-energy", `<div class="legend-dot" style="background:#9b59b6;"></div> ${LANGUAGES[lang].legendEnergy}`);
 
-    // 언어 선택 인터페이스 디자인 동적 활성화
     document.querySelectorAll('.lang-btn').forEach(btn => {
         if(btn.getAttribute('data-lang') === lang) {
             btn.classList.add('active');
@@ -367,10 +359,8 @@ function changeLanguage(lang) {
         }
     });
 
-    // 지도 런타임 마커 세트 리프레시 호출
     updateMapLanguage();
 }
-
 
 /**
  * 5. 관광 지도 전용 마커 및 인포윈도우 동적 리프레시 함수
@@ -415,7 +405,6 @@ function updateMapLanguage() {
     });
 }
 
-
 /**
  * ==========================================
  * 6. [초기화] 자동 도메인 판별 및 언어 로드 트리거
@@ -425,12 +414,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedLang = localStorage.getItem("language") || "ko";
     const href = window.location.href;
 
-    // 1. 현재 주소가 명소 관광 지도 페이지인 경우
     if (href.includes("tour") || href.includes("attraction") || document.getElementById("txt-title")) {
         changeLanguage(savedLang);
-    } 
-    // 2. 그 외 안전 지도 시스템 관할 페이지일 경우
-    else {
+    } else {
         applyLanguage();
     }
 });

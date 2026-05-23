@@ -95,29 +95,13 @@ body {
 
 <div class="header-bar">
     <h2 id="mapTitle">이동약자 안전 지도</h2>
-
-    <button class="back-btn" id="homeBtn"
-    onclick="location.href='index.html'">
-    🏠 홈으로
-    </button>
+    <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
 <div id="map"></div>
 
-<!-- 범례 -->
 <div class="legend">
-
     <h3 id="legendTitle">📍 지도 마커 안내</h3>
-
-    <div class="legend-item">
-        <img src="https://cdn-icons-png.flaticon.com/512/2942/2942100.png">
-        <div class="legend-text" id="cctvText">🎥 CCTV 위치</div>
-    </div>
-
-    <div class="legend-item">
-        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-        <div class="legend-text" id="streetText">💡 가로등 위치</div>
-    </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
@@ -140,16 +124,15 @@ body {
     </div>
 </div>
 
+<script src="language.js"></script>
+
 <script>
 function initMap() {
-
-    const lang =
-        localStorage.getItem("language") || "ko";
-
-    const t = translations[lang]["moveweak"];
+    const lang = localStorage.getItem("language") || "ko";
+    
+    const t = (window.translations && window.translations[lang]) ? window.translations[lang]["moveweak"] : {};
 
     const defaultCenter = { lat: 37.566535, lng: 126.977969 };
-
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 13,
         center: defaultCenter,
@@ -157,90 +140,50 @@ function initMap() {
 
     const bounds = new google.maps.LatLngBounds();
 
-    // 데이터 배열
+    // 맵 전역 구동 데이터 마커 설정
     const dataMarkers = [
-
-        // CCTV
-        {
-            title: t.cctvMarker1,
-            lat: 37.5668,
-            lng: 126.9785,
-            icon: "https://cdn-icons-png.flaticon.com/512/2942/2942100.png",
-            description: t.cctvDesc
-        },
-
-        {
-            title: t.cctvMarker2,
-            lat: 37.5682,
-            lng: 126.9761,
-            icon: "https://cdn-icons-png.flaticon.com/512/2942/2942100.png",
-            description: t.cctvDesc
-        },
-
-        // 가로등
-        {
-            title: t.streetMarker1,
-            lat: 37.5651,
-            lng: 126.9745,
-            icon: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
-            description: t.streetDesc
-        },
-
-        {
-            title: t.streetMarker2,
-            lat: 37.5675,
-            lng: 126.9770,
-            icon: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
-            description: t.streetDesc
-        },
-
         // 유동인구 많은곳
         {
-            title: t.crowdMarker,
+            title: t.crowdMarker || "유동인구 밀집지역",
             lat: 37.4979,
             lng: 127.0276,
             icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-            description: t.crowdDesc
+            description: t.crowdDesc || "인파가 혼잡하므로 이동 시 유의하세요."
         },
-
         // 유동인구 적은곳
         {
-            title: t.quietMarker,
+            title: t.quietMarker || "유동인구 적은 지역",
             lat: 37.5705,
             lng: 126.9832,
             icon: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
-            description: t.quietDesc
+            description: t.quietDesc || "인적이 드물어 한적한 보행로입니다."
         },
-
         // 교통사고 다발구역
         {
-            title: t.accidentMarker,
+            title: t.accidentMarker || "교통사고 다발구역",
             lat: 37.5662,
             lng: 126.9820,
             icon: "https://cdn-icons-png.flaticon.com/512/564/564619.png",
-            description: t.accidentDesc
+            description: t.accidentDesc || "교통사고 위험이 높아 주의가 필요합니다."
         },
-
         // 지하철 승강기
         {
-            title: t.elevatorMarker1,
+            title: t.elevatorMarker1 || "지하철 승강기 A",
             lat: 37.5550,
             lng: 126.9700,
             icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
-            description: t.elevatorDesc
+            description: t.elevatorDesc || "지하철역 내부 교통약자용 승강기입니다."
         },
-
         {
-            title: t.elevatorMarker2,
+            title: t.elevatorMarker2 || "지하철 승강기 B",
             lat: 37.5600,
             lng: 126.9750,
             icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
-            description: t.elevatorDesc
-        },
+            description: t.elevatorDesc || "지하철역 내부 교통약자용 승강기입니다."
+        }
     ];
 
     dataMarkers.forEach(place => {
-
         const marker = new google.maps.Marker({
             position: { lat: place.lat, lng: place.lng },
             map: map,
@@ -270,17 +213,17 @@ function initMap() {
         map.fitBounds(bounds);
     }
 }
+
+// 브라우저 렌더링 완료 이후 다국어 매핑 적용
+document.addEventListener("DOMContentLoaded", function() {
+    if (typeof applyLanguage === "function") {
+        applyLanguage("moveweak");
+    }
+});
 </script>
 
-<!-- 구글 맵 API -->
 <script async defer
-src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-</script>
-
-<script src="language.js"></script>
-
-<script>
-applyLanguage("moveweak");
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
 </script>
 
 </body>

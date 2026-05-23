@@ -202,12 +202,7 @@ body {
   </div>
 </div>
 
-<!-- ✅ language.js -->
 <script src="language.js"></script>
-<script>
-  applyLanguage("pregnant");
-</script>
-
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 
 <script>
@@ -229,6 +224,7 @@ let map;
 let loadedCount = 0;
 const totalLayers = Object.keys(FILES).length;
 const errors = [];
+let ICONS = {}; // 구글 SDK 로드 후 동적 생성을 위해 객체 분리
 
 function makeCircleIcon(color, size = 7) {
   return {
@@ -241,18 +237,19 @@ function makeCircleIcon(color, size = 7) {
   };
 }
 
-const ICONS = {
-  ramp:      makeCircleIcon("#7b9ed9", 7),
-  emergency: makeCircleIcon("#e53935", 9),
-  pharmacy:  makeCircleIcon("#43a047", 7),
-  rest:      makeCircleIcon("#ff8f00", 7),
-  toilet:    makeCircleIcon("#00838f", 7),
-  nursing:   makeCircleIcon("#e91e8c", 7),
-  parking:   makeCircleIcon("#6a1b9a", 7),
-  transit:   makeCircleIcon("#0277bd", 7),
-};
-
 function initMap() {
+  // 구글 지도 API 가 확실히 로드된 시점에 스타일 아이콘 동적 매핑
+  ICONS = {
+    ramp:      makeCircleIcon("#7b9ed9", 7),
+    emergency: makeCircleIcon("#e53935", 9),
+    pharmacy:  makeCircleIcon("#43a047", 7),
+    rest:      makeCircleIcon("#ff8f00", 7),
+    toilet:    makeCircleIcon("#00838f", 7),
+    nursing:   makeCircleIcon("#e91e8c", 7),
+    parking:   makeCircleIcon("#6a1b9a", 7),
+    transit:   makeCircleIcon("#0277bd", 7),
+  };
+
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 11,
     center: { lat: 37.5665, lng: 126.9780 },
@@ -260,6 +257,7 @@ function initMap() {
     streetViewControl: false,
     fullscreenControl: true,
   });
+  
   loadAllLayers();
 }
 
@@ -391,6 +389,12 @@ function layerDone(name) {
       box.style.display = "block";
       box.innerHTML = `⚠️ 아래 파일을 찾을 수 없어요. HTML과 같은 폴더에 있는지 확인해주세요!<br><b>${errors.join(", ")}</b>`;
     }
+    
+    // [성능 최적화] 로딩이 끝나면 전체 마커들을 클러스터러에 등록하여 브라우저 버벅임 방지
+    if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+      const allMarkers = Object.values(layerMarkers).flat();
+      new markerClusterer.MarkerClusterer({ map, markers: allMarkers });
+    }
   }
 }
 
@@ -399,6 +403,13 @@ function updateLoadingText(lastName) {
     ? `[${loadedCount}/${totalLayers}] ${lastName} 데이터 로드 완료...`
     : "데이터를 불러오는 중입니다...";
 }
+
+// 브라우저 렌더링이 완전히 끝난 뒤 다국어 번역을 안전하게 실행
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof applyLanguage === "function") {
+    applyLanguage("pregnant");
+  }
+});
 </script>
 
 <script async defer

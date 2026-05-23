@@ -78,7 +78,6 @@ body {
 }
 
 @media (max-width: 850px) {
-
     .header-bar,
     #map,
     .legend {
@@ -88,7 +87,6 @@ body {
     #map {
         height: 500px;
     }
-
 }
 </style>
 </head>
@@ -96,91 +94,58 @@ body {
 <body>
 
 <div class="header-bar">
-
     <h2 id="mapTitle">장애인 안전 지도</h2>
-
-    <button
-        class="back-btn"
-        id="homeBtn"
-        onclick="location.href='index.html'">
-        🏠 홈으로
-    </button>
-
+    <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
 <div id="map"></div>
 
 <div class="legend">
-
     <h3 id="legendTitle">📍 지도 마커 안내</h3>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-        <div class="legend-text" id="streetText">
-            💡 가로등 위치
-        </div>
+        <div class="legend-text" id="streetText">💡 가로등 위치</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
-        <div class="legend-text" id="facilityText">
-            ♿ 장애인 편의시설
-        </div>
+        <div class="legend-text" id="facilityText">♿ 장애인 편의시설</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png">
-        <div class="legend-text" id="benchText">
-            🪑 벤치 및 휴식 공간
-        </div>
+        <div class="legend-text" id="benchText">🪑 벤치 및 휴식 공간</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png">
-        <div class="legend-text" id="shelterText">
-            🧊 무더위쉼터
-        </div>
+        <div class="legend-text" id="shelterText">🧊 무더위쉼터</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
-        <div class="legend-text" id="crowdHighText">
-            👥 유동인구 밀집지역
-        </div>
+        <div class="legend-text" id="crowdHighText">👥 유동인구 밀집지역</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png">
-        <div class="legend-text" id="crowdLowText">
-            🌿 유동인구 적은 지역
-        </div>
+        <div class="legend-text" id="crowdLowText">🌿 유동인구 적은 지역</div>
     </div>
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png">
-        <div class="legend-text" id="accidentText">
-            ⚠️ 교통사고 다발구역
-        </div>
+        <div class="legend-text" id="accidentText">⚠️ 교통사고 다발구역</div>
     </div>
-
 </div>
 
 <script>
-
 function initMap() {
-
-    const defaultCenter = {
-        lat: 37.566535,
-        lng: 126.977969
-    };
-
-    const map = new google.maps.Map(
-        document.getElementById("map"),
-        {
-            zoom: 13,
-            center: defaultCenter
-        }
-    );
+    const defaultCenter = { lat: 37.566535, lng: 126.977969 };
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: defaultCenter
+    });
 
     const bounds = new google.maps.LatLngBounds();
 
@@ -190,12 +155,8 @@ function initMap() {
     ];
 
     streetLights.forEach(place => {
-
         const marker = new google.maps.Marker({
-            position: {
-                lat: place.lat,
-                lng: place.lng
-            },
+            position: { lat: place.lat, lng: place.lng },
             map: map,
             title: place.title,
             icon: {
@@ -218,25 +179,24 @@ function initMap() {
         });
 
         bounds.extend(marker.getPosition());
-
     });
 
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
-
 }
 </script>
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap"></script>
+
 <script src="language.js"></script>
-
 <script>
-applyLanguage("disabled");
-</script>
-
-<!-- ✅ 구글 맵 API -->
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+document.addEventListener("DOMContentLoaded", function() {
+    // DOM 요소가 브라우저에 완전히 그려진 뒤 언어 함수를 안전하게 호출합니다.
+    if (typeof applyLanguage === "function") {
+        applyLanguage("disabled");
+    }
+});
 </script>
 
 </body>
