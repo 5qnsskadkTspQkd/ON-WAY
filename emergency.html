@@ -127,11 +127,9 @@ function initMap() {
   });
 
   // ✅ 서울시 병원 API (HTTPS로 수정 완료)
-  const hospitalPromise = fetch(
-    "https://openapi.seoul.go.kr:8088/43444846746e61793639686d594859/xml/TbHospitalInfo/1/100/"
-  )
-  .then(res => res.text())
-  .then(xmlText => {
+  const hospitalPromise = fetch("./hospital.xml")
+    .then(res => res.text())
+    .then(xmlText => {
 
     const parser = new DOMParser();
 
