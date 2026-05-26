@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitleTag">임산부 안전 지도</title>
+<title>임산부 안전 지도</title>
 
 <style>
 body {
@@ -34,8 +34,11 @@ body {
   font-weight: bold;
 }
 
-.back-btn:hover {
-  background-color: #5a6268;
+.back-btn:hover { background-color: #5a6268; }
+
+.map-wrapper {
+  position: relative;
+  width: 800px;
 }
 
 #map {
@@ -43,11 +46,6 @@ body {
   height: 550px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.map-wrapper {
-  position: relative;
-  width: 800px;
 }
 
 .loading-overlay {
@@ -76,7 +74,6 @@ body {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .loading-text { color: #888; font-size: 14px; }
 
 .legend {
@@ -88,10 +85,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.legend h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
+.legend h3 { margin-top: 0; margin-bottom: 12px; }
 
 .legend-grid {
   display: grid;
@@ -99,10 +93,7 @@ body {
   gap: 10px 20px;
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-}
+.legend-item { display: flex; align-items: center; }
 
 .legend-item img {
   width: 32px;
@@ -110,10 +101,7 @@ body {
   margin-right: 12px;
 }
 
-.legend-text {
-  font-size: 15px;
-  color: #333;
-}
+.legend-text { font-size: 15px; color: #333; }
 
 .error-box {
   width: 800px;
@@ -128,11 +116,9 @@ body {
 }
 
 @media (max-width: 850px) {
-  .header-bar, .map-wrapper, #map, .legend, .error-box {
-    width: 95%;
-  }
+  .header-bar, .map-wrapper, #map, .loading-overlay, .legend, .error-box { width: 95%; }
   #map { height: 500px; }
-  .loading-overlay { width: 100%; }
+  .loading-overlay { width: 100%; height: 500px; }
   .legend-grid { grid-template-columns: 1fr; }
 }
 </style>
@@ -141,8 +127,8 @@ body {
 <body>
 
 <div class="header-bar">
-  <h2 id="pageTitle">임산부 안전 지도</h2>
-  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
+  <h2>임산부 안전 지도</h2>
+  <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
 <div class="map-wrapper">
@@ -156,53 +142,52 @@ body {
 <div class="error-box" id="errorBox"></div>
 
 <div class="legend">
-  <h3 id="legendTitle">📍 지도 마커 안내</h3>
+  <h3>📍 지도 마커 안내</h3>
   <div class="legend-grid">
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2780/2780887.png">
-      <div class="legend-text" id="rampText">♿ 경사로 및 무장애 시설</div>
+      <span class="legend-text">♿ 경사로 및 무장애 시설</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <div class="legend-text" id="emergencyText">🏥 응급 의료 기관</div>
+      <span class="legend-text">🏥 응급 의료 기관</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2913/2913569.png">
-      <div class="legend-text" id="pharmacyText">💊 약국</div>
+      <span class="legend-text">💊 약국</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/7096/7096518.png">
-      <div class="legend-text" id="restText">🪑 휴식 공간 (벤치·쉼터)</div>
+      <span class="legend-text">🪑 휴식 공간 (벤치·쉼터)</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/3050/3050451.png">
-      <div class="legend-text" id="toiletText">🚻 개방형 화장실</div>
+      <span class="legend-text">🚻 개방형 화장실</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/3588/3588397.png">
-      <div class="legend-text" id="nursingText">🤱 수유실</div>
+      <span class="legend-text">🤱 수유실</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/1048/1048313.png">
-      <div class="legend-text" id="parkingText">🅿️ 임산부 우선 주차·배려구역</div>
+      <span class="legend-text">🅿️ 임산부 우선 주차·배려구역</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991589.png">
-      <div class="legend-text" id="transitText">🚇 지하철·대중교통 연계 시설</div>
+      <span class="legend-text">🚇 지하철·대중교통 연계 시설</span>
     </div>
 
   </div>
 </div>
 
-<script src="language.js"></script>
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 
 <script>
@@ -216,17 +201,25 @@ const FILES = {
   transit:   "transit.csv",
 };
 
-const layerMarkers = {
-  ramp: [], emergency: [], pharmacy: [], rest: [], toilet: [], parking: [], transit: []
+const LAYER_META = {
+  ramp:      { color: "#7b9ed9", size: 7, emoji: "♿", label: "경사로 및 무장애 시설" },
+  emergency: { color: "#e53935", size: 9, emoji: "🏥", label: "응급 의료 기관" },
+  pharmacy:  { color: "#43a047", size: 7, emoji: "💊", label: "약국" },
+  rest:      { color: "#ff8f00", size: 7, emoji: "🪑", label: "휴식 공간" },
+  toilet:    { color: "#00838f", size: 7, emoji: "🚻", label: "개방형 화장실" },
+  parking:   { color: "#6a1b9a", size: 7, emoji: "🅿️", label: "임산부 우선 주차" },
+  transit:   { color: "#0277bd", size: 7, emoji: "🚇", label: "대중교통 연계 시설" },
 };
+
+const layerMarkers = {};
+Object.keys(FILES).forEach(k => layerMarkers[k] = []);
 
 let map;
 let loadedCount = 0;
 const totalLayers = Object.keys(FILES).length;
 const errors = [];
-let ICONS = {}; // 구글 SDK 로드 후 동적 생성을 위해 객체 분리
 
-function makeCircleIcon(color, size = 7) {
+function makeIcon(color, size) {
   return {
     path: google.maps.SymbolPath.CIRCLE,
     scale: size,
@@ -238,18 +231,6 @@ function makeCircleIcon(color, size = 7) {
 }
 
 function initMap() {
-  // 구글 지도 API 가 확실히 로드된 시점에 스타일 아이콘 동적 매핑
-  ICONS = {
-    ramp:      makeCircleIcon("#7b9ed9", 7),
-    emergency: makeCircleIcon("#e53935", 9),
-    pharmacy:  makeCircleIcon("#43a047", 7),
-    rest:      makeCircleIcon("#ff8f00", 7),
-    toilet:    makeCircleIcon("#00838f", 7),
-    nursing:   makeCircleIcon("#e91e8c", 7),
-    parking:   makeCircleIcon("#6a1b9a", 7),
-    transit:   makeCircleIcon("#0277bd", 7),
-  };
-
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 11,
     center: { lat: 37.5665, lng: 126.9780 },
@@ -257,159 +238,106 @@ function initMap() {
     streetViewControl: false,
     fullscreenControl: true,
   });
-  
-  loadAllLayers();
+
+  Object.keys(FILES).forEach(key => loadCSV(key));
 }
 
-function loadAllLayers() {
-  updateLoadingText();
-
-  loadCSV(FILES.ramp, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("ramp", lat, lng, `♿ ${name}`, `경사로 및 무장애 시설<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.ramp);
-    });
-    layerDone("경사로");
-  });
-
-  loadCSV(FILES.emergency, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("emergency", lat, lng, `🏥 ${name}`, `응급 의료 기관<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.emergency);
-    });
-    layerDone("응급 의료 기관");
-  });
-
-  loadCSV(FILES.pharmacy, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("pharmacy", lat, lng, `💊 ${name}`, `약국<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.pharmacy);
-    });
-    layerDone("약국");
-  });
-
-  loadCSV(FILES.rest, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("rest", lat, lng, `🪑 ${name}`, `휴식 공간<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.rest);
-    });
-    layerDone("휴식 공간");
-  });
-
-  loadCSV(FILES.toilet, (rows) => {
-    rows.forEach(({ cols }) => {
-      if (cols.length < 3) return;
-      const name = cols[0].trim();
-      const lat  = parseFloat(cols[1]);
-      const lng  = parseFloat(cols[2]);
-      const type = cols.length >= 4 ? cols[3].trim().toLowerCase() : "toilet";
-      if (isNaN(lat) || isNaN(lng)) return;
-      const isNursing = type === "nursing";
-      const icon  = isNursing ? ICONS.nursing : ICONS.toilet;
-      const emoji = isNursing ? "🤱" : "🚻";
-      const label = isNursing ? "수유실" : "개방형 화장실";
-      addMarker("toilet", lat, lng, `${emoji} ${name}`, `${label}<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, icon);
-    });
-    layerDone("화장실·수유실");
-  }, true);
-
-  loadCSV(FILES.parking, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("parking", lat, lng, `🅿️ ${name}`, `임산부 우선 주차·배려구역<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.parking);
-    });
-    layerDone("우선 주차");
-  });
-
-  loadCSV(FILES.transit, (rows) => {
-    rows.forEach(({ name, lat, lng }) => {
-      addMarker("transit", lat, lng, `🚇 ${name}`, `지하철·대중교통 연계 시설<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, ICONS.transit);
-    });
-    layerDone("대중교통 연계");
-  });
-}
-
-function loadCSV(url, callback, rawCols = false) {
-  fetch(url)
+// ── CSV 로드: 성공/실패 모두 layerDone() 호출 보장 ──
+function loadCSV(key) {
+  fetch(FILES[key])
     .then(res => {
-      if (!res.ok) throw new Error(url + " 파일 없음");
+      if (!res.ok) throw new Error(FILES[key] + " 없음");
       return res.text();
     })
     .then(text => {
-      const rows = text.trim().split("\n").slice(1);
+      const lines = text.trim().split("\n").slice(1);
       const parsed = [];
-      for (const row of rows) {
-        const cols = row.split(",");
-        if (rawCols) {
-          parsed.push({ cols });
+
+      for (const line of lines) {
+        const cols = line.split(",");
+        if (cols.length < 3) continue;
+
+        const name = cols[0].trim();
+        const lat  = parseFloat(cols[1]);
+        const lng  = parseFloat(cols[2]);
+        if (isNaN(lat) || isNaN(lng)) continue;
+
+        // toilet.csv 는 4번째 열로 수유실 구분
+        if (key === "toilet" && cols.length >= 4 && cols[3].trim().toLowerCase() === "nursing") {
+          parsed.push({ name, lat, lng, isNursing: true });
         } else {
-          if (cols.length < 3) continue;
-          const lat = parseFloat(cols[1]);
-          const lng = parseFloat(cols[2]);
-          if (isNaN(lat) || isNaN(lng)) continue;
-          parsed.push({ name: cols[0].trim(), lat, lng });
+          parsed.push({ name, lat, lng, isNursing: false });
         }
       }
-      const CHUNK = 2000;
+
+      // 청크 처리 후 맨 마지막에만 layerDone 호출
+      const CHUNK = 500;
       let idx = 0;
-      function next() {
-        callback(parsed.slice(idx, idx + CHUNK));
+      function nextChunk() {
+        parsed.slice(idx, idx + CHUNK).forEach(({ name, lat, lng, isNursing }) => {
+          const meta  = isNursing
+            ? { color: "#e91e8c", size: 7, emoji: "🤱", label: "수유실" }
+            : LAYER_META[key];
+          addMarker(key, lat, lng, name, meta);
+        });
         idx += CHUNK;
-        if (idx < parsed.length) setTimeout(next, 0);
+        if (idx < parsed.length) {
+          setTimeout(nextChunk, 0);
+        } else {
+          layerDone(key, false); // ✅ 청크 완료 후 딱 한 번만 호출
+        }
       }
-      next();
+      nextChunk();
     })
     .catch(err => {
-      console.warn(err);
-      errors.push(url);
-      layerDone(url);
+      console.warn("로드 실패:", err.message);
+      errors.push(FILES[key]);
+      layerDone(key, true); // ✅ 실패해도 반드시 호출
     });
 }
 
-function addMarker(layer, lat, lng, title, infoHTML, icon) {
+function addMarker(key, lat, lng, name, meta) {
   const marker = new google.maps.Marker({
     position: { lat, lng },
-    map: map,
-    title: title,
-    icon: icon,
-    visible: true,
+    map,
+    title: name,
+    icon: makeIcon(meta.color, meta.size),
   });
+
   const iw = new google.maps.InfoWindow({
-    content: `<div style="padding:10px; font-family:'Malgun Gothic',sans-serif; color:#333; font-size:13px;">
-                <strong>${title}</strong><br>
-                <span style="color:#888; font-size:12px;">${infoHTML}</span>
+    content: `<div style="padding:8px 10px; font-family:'Malgun Gothic',sans-serif; min-width:160px;">
+                <strong>${meta.emoji} ${name}</strong><br>
+                <span style="color:#888; font-size:12px;">${meta.label}</span>
               </div>`
   });
+
   marker.addListener("click", () => iw.open(map, marker));
-  layerMarkers[layer].push(marker);
+  layerMarkers[key].push(marker);
 }
 
-function layerDone(name) {
+function layerDone(key, isError) {
   loadedCount++;
-  updateLoadingText(name);
+  const meta = LAYER_META[key] || { emoji: "📂", label: key };
+  document.getElementById("loadingText").textContent =
+    `[${loadedCount}/${totalLayers}] ${meta.emoji} ${meta.label} ${isError ? "없음" : "완료"}...`;
+
   if (loadedCount >= totalLayers) {
     document.getElementById("loadingOverlay").style.display = "none";
+
     if (errors.length > 0) {
       const box = document.getElementById("errorBox");
       box.style.display = "block";
-      box.innerHTML = `⚠️ 아래 파일을 찾을 수 없어요. HTML과 같은 폴더에 있는지 확인해주세요!<br><b>${errors.join(", ")}</b>`;
+      box.innerHTML = `⚠️ 아래 CSV 파일을 찾지 못했어요. HTML과 같은 폴더에 넣어주세요.<br>
+        <b>${errors.join(", ")}</b><br>
+        <small style="color:#aaa;">파일 없어도 지도는 정상 표시됩니다.</small>`;
     }
-    
-    // [성능 최적화] 로딩이 끝나면 전체 마커들을 클러스터러에 등록하여 브라우저 버벅임 방지
-    if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
-      const allMarkers = Object.values(layerMarkers).flat();
-      new markerClusterer.MarkerClusterer({ map, markers: allMarkers });
+
+    if (window.markerClusterer?.MarkerClusterer) {
+      const all = Object.values(layerMarkers).flat();
+      if (all.length > 0) new markerClusterer.MarkerClusterer({ map, markers: all });
     }
   }
 }
-
-function updateLoadingText(lastName) {
-  document.getElementById("loadingText").textContent = lastName
-    ? `[${loadedCount}/${totalLayers}] ${lastName} 데이터 로드 완료...`
-    : "데이터를 불러오는 중입니다...";
-}
-
-// 브라우저 렌더링이 완전히 끝난 뒤 다국어 번역을 안전하게 실행
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof applyLanguage === "function") {
-    applyLanguage("pregnant");
-  }
-});
 </script>
 
 <script async defer

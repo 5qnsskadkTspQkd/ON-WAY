@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 <title id="pageTitleTag">이동약자 안전 지도</title>
+
 
 <style>
 body {
@@ -17,6 +19,7 @@ body {
     background-color: #f5f6f7;
 }
 
+
 .header-bar {
     width: 800px;
     display: flex;
@@ -24,6 +27,7 @@ body {
     align-items: center;
     margin-bottom: 15px;
 }
+
 
 .back-btn {
     background-color: #6c757d;
@@ -35,9 +39,11 @@ body {
     font-weight: bold;
 }
 
+
 .back-btn:hover {
     background-color: #5a6268;
 }
+
 
 #map {
     width: 800px;
@@ -45,6 +51,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
 
 /* 범례 */
 .legend {
@@ -56,10 +63,12 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
+
 .legend h3 {
     margin-top: 0;
     margin-bottom: 12px;
 }
+
 
 .legend-item {
     display: flex;
@@ -67,16 +76,19 @@ body {
     margin-bottom: 10px;
 }
 
+
 .legend-item img {
     width: 32px;
     height: 32px;
     margin-right: 12px;
 }
 
+
 .legend-text {
     font-size: 15px;
     color: #333;
 }
+
 
 @media (max-width: 850px) {
     .header-bar,
@@ -84,6 +96,7 @@ body {
     .legend {
         width: 95%;
     }
+
 
     #map {
         height: 500px;
@@ -93,30 +106,37 @@ body {
 </head>
 <body>
 
+
 <div class="header-bar">
     <h2 id="mapTitle">이동약자 안전 지도</h2>
     <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
+
 <div id="map"></div>
+
 
 <div class="legend">
     <h3 id="legendTitle">📍 지도 마커 안내</h3>
+
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
         <div class="legend-text" id="crowdHighText">👥 유동인구 많은 지역</div>
     </div>
 
+
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png">
         <div class="legend-text" id="crowdLowText">🌿 유동인구 적은 지역</div>
     </div>
 
+
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png">
         <div class="legend-text" id="accidentText">⚠️ 교통사고 다발구역</div>
     </div>
+
 
     <div class="legend-item">
         <img src="https://cdn-icons-png.flaticon.com/512/1048/1048362.png">
@@ -124,13 +144,16 @@ body {
     </div>
 </div>
 
+
 <script src="language.js"></script>
+
 
 <script>
 function initMap() {
     const lang = localStorage.getItem("language") || "ko";
-    
+   
     const t = (window.translations && window.translations[lang]) ? window.translations[lang]["moveweak"] : {};
+
 
     const defaultCenter = { lat: 37.566535, lng: 126.977969 };
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -138,83 +161,45 @@ function initMap() {
         center: defaultCenter,
     });
 
+
     const bounds = new google.maps.LatLngBounds();
 
-    // 맵 전역 구동 데이터 마커 설정
-    const dataMarkers = [
-        // 유동인구 많은곳
-        {
-            title: t.crowdMarker || "유동인구 밀집지역",
-            lat: 37.4979,
-            lng: 127.0276,
-            icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-            description: t.crowdDesc || "인파가 혼잡하므로 이동 시 유의하세요."
-        },
-        // 유동인구 적은곳
-        {
-            title: t.quietMarker || "유동인구 적은 지역",
-            lat: 37.5705,
-            lng: 126.9832,
-            icon: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
-            description: t.quietDesc || "인적이 드물어 한적한 보행로입니다."
-        },
-        // 교통사고 다발구역
-        {
-            title: t.accidentMarker || "교통사고 다발구역",
-            lat: 37.5662,
-            lng: 126.9820,
-            icon: "https://cdn-icons-png.flaticon.com/512/564/564619.png",
-            description: t.accidentDesc || "교통사고 위험이 높아 주의가 필요합니다."
-        },
-        // 지하철 승강기
-        {
-            title: t.elevatorMarker1 || "지하철 승강기 A",
-            lat: 37.5550,
-            lng: 126.9700,
-            icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
-            description: t.elevatorDesc || "지하철역 내부 교통약자용 승강기입니다."
-        },
-        {
-            title: t.elevatorMarker2 || "지하철 승강기 B",
-            lat: 37.5600,
-            lng: 126.9750,
-            icon: "https://cdn-icons-png.flaticon.com/512/1048/1048362.png",
-            description: t.elevatorDesc || "지하철역 내부 교통약자용 승강기입니다."
-        }
-    ];
+    // ===== CSV 경사로/엘리베이터 데이터 =====
+    const rampData = [
+     { "name": "서울", "line": "1", "lat": 37.5547, "lng": 126.9706, "description": "<b>외부출입구</b>: #4, #9-1<br><b>외부E/V</b>: #2, #4<br><b>대합실</b>: 화장실, 환승통로<br><b>내부E/V</b>: #12" },
+     { "name": "시청", "line": "1", "lat": 37.5653, "lng": 126.9772, "description": "<b>외부출입구</b>: #6<br><b>대합실</b>: 화장실, 환승통로<br><b>외부E/V</b>: #9" },
+  // ... (아래 파일로 전달)
+];
 
-    dataMarkers.forEach(place => {
+    const lineColors = { "1":"#0052A4","2":"#00A84D","3":"#EF7C1C","4":"#00A5DE","5":"#996CAC","6":"#CD7C2F","7":"#747F00","8":"#E6186C" };
+
+    rampData.forEach(station => {
+        const color = lineColors[station.line] || "#555";
+        const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40"><path d="M16 0 C7.16 0 0 7.16 0 16 C0 28 16 40 16 40 C16 40 32 28 32 16 C32 7.16 24.84 0 16 0Z" fill="${color}"/><text x="16" y="22" text-anchor="middle" font-size="16" fill="white">♿</text></svg>`;
+        const iconUrl = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgIcon);
+
         const marker = new google.maps.Marker({
-            position: { lat: place.lat, lng: place.lng },
+            position: { lat: station.lat, lng: station.lng },
             map: map,
-            title: place.title,
-            icon: {
-                url: place.icon,
-                scaledSize: new google.maps.Size(40, 40)
-            }
-        });
+            title: station.name + " (" + station.line + "호선)",
+            icon: { url: iconUrl, scaledSize: new google.maps.Size(28, 35), anchor: new google.maps.Point(14, 35) }
+    });
 
         const infowindow = new google.maps.InfoWindow({
-            content: `
-            <div style="padding:10px;">
-                <strong>${place.title}</strong><br>
-                ${place.description}
-            </div>`
-        });
-
-        marker.addListener("click", () => {
-            infowindow.open(map, marker);
-        });
-
-        bounds.extend(marker.getPosition());
+            content: `<div style="padding:10px;max-width:220px;font-family:'Malgun Gothic',sans-serif;"><strong style="color:${color};">♿ ${station.name} (${station.line}호선)</strong><br><br><div style="font-size:13px;line-height:1.8;">${station.description}</div></div>`
     });
+
+        marker.addListener("click", () => { infowindow.open(map, marker); });
+        bounds.extend(marker.getPosition());
+});
+// ===== CSV 데이터 끝 =====
+
 
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
 }
 
-// 브라우저 렌더링 완료 이후 다국어 매핑 적용
 document.addEventListener("DOMContentLoaded", function() {
     if (typeof applyLanguage === "function") {
         applyLanguage("moveweak");
@@ -222,9 +207,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+
 <script async defer
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
 </script>
+
 
 </body>
 </html>

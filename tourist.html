@@ -216,46 +216,142 @@ body {
   </div>
 </div>
 
-<script src="language.js"></script>
-
 <script>
-if (typeof LANGUAGES === 'undefined') {
-  var LANGUAGES = {
-    ko: {
-      title: "서울 명소 관광 지도", home: "🏠 홈으로", filterTitle: "🔎 보고 싶은 카테고리를 선택하세요 (중복 선택 가능)",
-      catTradition: "🏯 전통·역사", catModern: "🌆 현대·도심", catNature: "🌿 자연·힐링", catEnergy: "⚡ 쇼핑·엔터(에너지)",
-      legendTitle: "📍 카테고리별 마커 안내",
-      legendTradition: "🏯 전통·역사 명소 (경복궁, 북촌 한옥마을 등)",
-      legendModern: "🌆 현대·도심 명소 (N서울타워, 명동 등)",
-      legendNature: "🌿 자연·힐링 명소 (한강공원, 서울숲 등)",
-      legendEnergy: "⚡ 쇼핑·엔터 명소 (롯데월드, 홍대 등)",
-      tradition: [
-        { name: "경복궁", desc: "조선 왕조의 법궁이자 서울의 상징적인 문화유산" },
-        { name: "북촌 한옥마을", desc: "도심 속 실제 주민들이 거주하는 전통 한옥 보존 지역" },
-        { name: "창덕궁", desc: "자연과의 조화가 아름다운 유네스코 세계문화유산" },
-        { name: "인사동", desc: "전통 화랑, 고미술품, 전통찻집이 밀집한 문화의 거리" }
-      ],
-      modern: [
-        { name: "N서울타워", desc: "남산 정상에서 서울 시내를 한눈에 내려다보는 전망대" },
-        { name: "명동", desc: "트렌디한 쇼핑몰과 다양한 길거리 음식을 즐길 수 있는 번화가" },
-        { name: "동대문디자인플라자 (DDP)", desc: "독창적인 디자인과 다양한 전시가 열리는 복합문화공간" },
-        { name: "강남역", desc: "트렌드와 엔터테인먼트, 고층 빌딩이 밀집한 핫플레이스" }
-      ],
-      nature: [
-        { name: "반포 한강공원", desc: "달빛무지개분수와 시원한 강바람을 즐길 수 있는 휴식처" },
-        { name: "남산공원", desc: "사계절 아름다운 산책로와 자연을 품은 서울 중심의 공원" },
-        { name: "서울숲", desc: "문화예술공원, 생태숲 등 다양한 테마로 꾸며진 녹색 쉼터" },
-        { name: "북한산국립공원", desc: "도심 속 웅장한 바위산과 수려한 경관을 자랑하는 국립공원" }
-      ],
-      energy: [
-        { name: "롯데월드", desc: "모험과 신비가 가득한 대형 실내외 테마파크" },
-        { name: "코엑스 스타필드", desc: "별마당도서관과 쇼핑, 아쿠아리움이 결합된 대형 몰" },
-        { name: "홍대거리", desc: "젊음의 에너지와 버스킹, 독특한 인디 문화가 가득한 곳" },
-        { name: "이태원", desc: "다양한 세계 문화와 이국적인 맛집들이 모여있는 특구" }
-      ]
-    }
-  };
-}
+// 외부 파일 에러 방지를 위해 LANGUAGES 데이터를 내부에 통합했습니다.
+var LANGUAGES = {
+  ko: {
+    title: "서울 명소 관광 지도", home: "🏠 홈으로", filterTitle: "🔎 보고 싶은 카테고리를 선택하세요 (중복 선택 가능)",
+    catTradition: "🏯 전통·역사", catModern: "🌆 현대·도심", catNature: "🌿 자연·힐링", catEnergy: "⚡ 쇼핑·엔터(에너지)",
+    legendTitle: "📍 카테고리별 마커 안내",
+    legendTradition: "🏯 전통·역사 명소 (경복궁, 북촌 한옥마을 등)",
+    legendModern: "🌆 현대·도심 명소 (N서울타워, 명동 등)",
+    legendNature: "🌿 자연·힐링 명소 (한강공원, 서울숲 등)",
+    legendEnergy: "⚡ 쇼핑·엔터 명소 (롯데월드, 홍대 등)",
+    tradition: [
+      { name: "경복궁", desc: "조선 왕조의 법궁이자 서울의 상징적인 문화유산" },
+      { name: "북촌 한옥마을", desc: "도심 속 실제 주민들이 거주하는 전통 한옥 보존 지역" },
+      { name: "창덕궁", desc: "자연과의 조화가 아름다운 유네스코 세계문화유산" },
+      { name: "인사동", desc: "전통 화랑, 고미술품, 전통찻집이 밀집한 문화의 거리" }
+    ],
+    modern: [
+      { name: "N서울타워", desc: "남산 정상에서 서울 시내를 한눈에 내려다보는 전망대" },
+      { name: "명동", desc: "트렌디한 쇼핑몰과 다양한 길거리 음식을 즐길 수 있는 번화가" },
+      { name: "동대문디자인플라자 (DDP)", desc: "독창적인 디자인과 다양한 전시가 열리는 복합문화공간" },
+      { name: "강남역", desc: "트렌드와 엔터테인먼트, 고층 빌딩이 밀집한 핫플레이스" }
+    ],
+    nature: [
+      { name: "반포 한강공원", desc: "달빛무지개분수와 시원한 강바람을 즐길 수 있는 휴식처" },
+      { name: "남산공원", desc: "사계절 아름다운 산책로와 자연을 품은 서울 중심의 공원" },
+      { name: "서울숲", desc: "문화예술공원, 생태숲 등 다양한 테마로 꾸며진 녹색 쉼터" },
+      { name: "북한산국립공원", desc: "도심 속 웅장한 바위산과 수려한 경관을 자랑하는 국립공원" }
+    ],
+    energy: [
+      { name: "롯데월드", desc: "모험과 신비가 가득한 대형 실내외 테마파크" },
+      { name: "코엑스 스타필드", desc: "별마당도서관과 쇼핑, 아쿠아리움이 결합된 대형 몰" },
+      { name: "홍대거리", desc: "젊음의 에너지와 버스킹, 독특한 인디 문화가 가득한 곳" },
+      { name: "이태원", desc: "다양한 세계 문화와 이국적인 맛집들이 모여있는 특구" }
+    ]
+  },
+  en: {
+    title: "Seoul Attractions Guide Map", home: "🏠 Home", filterTitle: "🔎 Select categories you want to see (Multiple selection allowed)",
+    catTradition: "🏯 Tradition·History", catModern: "🌆 Modern·Downtown", catNature: "🌿 Nature·Healing", catEnergy: "⚡ Shopping·Ent.",
+    legendTitle: "📍 Marker Guide by Category",
+    legendTradition: "🏯 Historical (Gyeongbokgung, Bukchon, etc.)",
+    legendModern: "🌆 Modern (N Seoul Tower, Myeongdong, etc.)",
+    legendNature: "🌿 Nature (Hangang Park, Seoul Forest, etc.)",
+    legendEnergy: "⚡ Entertainment (Lotte World, Hongdae, etc.)",
+    tradition: [
+      { name: "Gyeongbokgung Palace", desc: "The main royal palace of the Joseon Dynasty and an iconic cultural heritage." },
+      { name: "Bukchon Hanok Village", desc: "A traditional village where residents actually live, preserving old Seoul." },
+      { name: "Changdeokgung Palace", desc: "A UNESCO World Heritage site known for its beautiful harmony with nature." },
+      { name: "Insa-dong", desc: "A cultural street packed with traditional galleries, antiques, and teahouses." }
+    ],
+    modern: [
+      { name: "N Seoul Tower", desc: "An observatory on Namsan Mountain offering a panoramic view of downtown Seoul." },
+      { name: "Myeong-dong", desc: "A bustling district perfect for trendy shopping and various street foods." },
+      { name: "Dongdaemun Design Plaza (DDP)", desc: "A complex cultural space famous for its unique architecture and exhibitions." },
+      { name: "Gangnam Station", desc: "A hot spot packed with trends, entertainment, and towering skyscrapers." }
+    ],
+    nature: [
+      { name: "Banpo Hangang Park", desc: "A relaxing riverside park famous for the Moonlight Rainbow Fountain." },
+      { name: "Namsan Park", desc: "A central park with scenic walking trails beautiful in all four seasons." },
+      { name: "Seoul Forest", desc: "A green eco-park consisting of cultural arts parks and ecological forests." },
+      { name: "Bukhansan National Park", desc: "A national park boasting majestic rocky peaks and magnificent views." }
+    ],
+    energy: [
+      { name: "Lotte World", desc: "A huge indoor and outdoor theme park full of adventure and mystery." },
+      { name: "Starfield COEX Mall", desc: "A massive mall featuring the Starfield Library and an aquarium." },
+      { name: "Hongdae Street", desc: "A place filled with youthful energy, street performances, and indie culture." },
+      { name: "Itaewon", desc: "A special district where diverse global cultures and exotic restaurants gather." }
+    ]
+  },
+  ja: {
+    title: "ソウル名所観光マップ", home: "🏠 ホームへ", filterTitle: "🔎 表示したいカテゴリを選択してください（複数選択可）",
+    catTradition: "🏯 伝統・歴史", catModern: "🌆 現代・都心", catNature: "🌿 自然・ヒーリング", catEnergy: "⚡ ショッピング・エンタメ",
+    legendTitle: "📍 カテゴリ別マーカー案内",
+    legendTradition: "🏯 伝統・歴史名所（景福宮、北村韓屋村など）",
+    legendModern: "🌆 現代・都心名所（Nソウルタワー、明洞など）",
+    legendNature: "🌿 自然・ヒーリング名所（漢江公園、ソウルの森など）",
+    legendEnergy: "⚡ ショッピング・エンタメ名所（ロッテワールド、弘大など）",
+    tradition: [
+      { name: "景福宮", desc: "朝鮮王朝の正宮であり、ソウルを象徴する代表的な文化遺産" },
+      { name: "北村韓屋村", desc: "都心の中で実際の住民が暮らす、伝統的な韓屋の保存地域" },
+      { name: "昌徳宮", desc: "自然との調和が見事な、ユネスコ世界文化遺産に登録された宮殿" },
+      { name: "仁寺洞", desc: "伝統的な画廊や古美術品店、伝統茶屋が集まる文化の街" }
+    ],
+    modern: [
+      { name: "Nソウルタワー", desc: "南山の山頂からソウル市内を一望できるランドマーク展望台" },
+      { name: "明洞", desc: "トレンドのショップや多彩な食べ歩きグルメが楽しめる繁華街" },
+      { name: "東大門デザインプラザ (DDP)", desc: "独創的なデザインと様々な展示が楽しめる複合文化空間" },
+      { name: "江南駅", desc: "トレンド、エンターテインメント、高層ビルが集まる最先端スポット" }
+    ],
+    nature: [
+      { name: "盤浦漢江公園", desc: "月光レインボー噴水と心地よい川風が楽しめる憩いの場" },
+      { name: "南山公園", desc: "四季折々の美しい散策路が魅力的な、ソウル中心部の自然公園" },
+      { name: "ソウルの森", desc: "文化芸術公園や生態の森など、様々なテーマを持つ緑豊かな公園" },
+      { name: "北漢山国立公園", desc: "都心にありながら雄大な岩山と秀麗な景観を誇る国立公園" }
+    ],
+    energy: [
+      { name: "ロッテワールド", desc: "冒険と神秘に満ちた、大型の室内外テーマパーク" },
+      { name: "コエックス スターフィールド", desc: "ピョルマダン図書館やアクアリウムが融合した大型モール" },
+      { name: "弘大通り", desc: "若者のエネルギー、ストリートライブ、独特なインディーズ文化の街" },
+      { name: "梨泰院", desc: "多様な世界の文化と、異国情緒あふれるグルメが集まる特区" }
+    ]
+  },
+  zh: {
+    title: "首尔名胜旅游导览地图", home: "🏠 返回首页", filterTitle: "🔎 请选择想查看的类别（可多选）",
+    catTradition: "🏯 传统·历史", catModern: "🌆 现代·市中心", catNature: "🌿 自然· healing", catEnergy: "⚡ 购物·娱乐",
+    legendTitle: "📍 各类别标记说明",
+    legendTradition: "🏯 传统·历史名胜（景福宫、北村韩屋村等）",
+    legendModern: "🌆 现代·市中心名胜（N首尔塔、明洞等）",
+    legendNature: "🌿 自然·休闲名胜（汉江公园、首尔林等）",
+    legendEnergy: "⚡ 购物·娱乐名胜（乐天世界、弘大等）",
+    tradition: [
+      { name: "景福宫", desc: "朝鲜王朝的正宫，是首尔最具象征意义的文化遗产。" },
+      { name: "北村韩屋村", desc: "市中心实际有居民居住的传统韩屋保存区。" },
+      { name: "昌德宫", desc: "与自然环境和谐融合的联合国教科文组织世界文化遗产。" },
+      { name: "仁寺洞", desc: "汇集了传统画廊、古董店和传统茶馆的文化街区。" }
+    ],
+    modern: [
+      { name: "N首尔塔", desc: "坐落于南山顶峰，可将首尔市区全景尽收眼底的展望台。" },
+      { name: "明洞", desc: "可以享受潮流购物和各种街头小吃的繁华商业区。" },
+      { name: "东大门设计广场 (DDP)", desc: "以独特建筑设计著称，举办各类展览的复合文化空间。" },
+      { name: "江南驿", desc: "潮流、娱乐与摩天大楼林立的时尚聚集地。" }
+    ],
+    nature: [
+      { name: "盘浦汉江公园", desc: "可以欣赏月光彩虹喷泉并享受清凉江风的休闲去处。" },
+      { name: "南山公园", desc: "四季皆美的散步道，是位于首尔市中心的自然公园。" },
+      { name: "首尔林", desc: "由文化艺术公园、生态林等多个主题打造的绿色休憩空间。" },
+      { name: "北汉山国家公园", desc: "市中心拥有雄伟岩壁与秀丽风景的国家公园。" }
+    ],
+    energy: [
+      { name: "乐天世界", desc: "充满冒险与神秘色彩的大型室内外主题公园。" },
+      { name: "COEX Starfield", desc: "融合了星空图书馆、购物商场和水族馆的大型商场。" },
+      { name: "弘大街区", desc: "洋溢着青春活力、街头路演和独特独立文化的圣地。" },
+      { name: "梨泰院", desc: "融合了多元国际文化与异国风味美食的特色特区。" }
+    ]
+  }
+};
 
 const COORDINATES = {
   tradition: [{lat: 37.5796, lng: 126.9770}, {lat: 37.5829, lng: 126.9835}, {lat: 37.5826, lng: 126.9921}, {lat: 37.5717, lng: 126.9860}],
@@ -273,7 +369,6 @@ let currentLang = "ko";
 const categoryMarkers = { tradition: [], modern: [], nature: [], energy: [] };
 const categoryState = { tradition: true, modern: true, nature: true, energy: true };
 
-// [교정] 구글 지도가 로드된 후 실행될 수 있도록 안전한 구조로 은닉
 function makeMarkerIcon(color) {
   return {
     path: google.maps.SymbolPath.CIRCLE,
@@ -300,7 +395,7 @@ function initMap() {
 function createAllMarkers() {
   Object.keys(COORDINATES).forEach(category => {
     const color = CATEGORY_COLORS[category];
-    const icon = makeMarkerIcon(color); // google 객체 로드 후 실행되므로 안심!
+    const icon = makeMarkerIcon(color);
 
     COORDINATES[category].forEach((pos, index) => {
       const marker = new google.maps.Marker({
@@ -320,7 +415,7 @@ function createAllMarkers() {
 }
 
 function changeLanguage(lang) {
-  if (!LANGUAGES[lang]) return; 
+  if (!LANGUAGES[lang]) return;
   currentLang = lang;
 
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -357,7 +452,7 @@ function updateMapLanguage() {
 
   Object.keys(categoryMarkers).forEach(category => {
     const color = CATEGORY_COLORS[category];
-    const placesList = data[category]; 
+    const placesList = data[category];
 
     categoryMarkers[category].forEach((marker) => {
       google.maps.event.clearInstanceListeners(marker);
@@ -386,7 +481,7 @@ function updateMapLanguage() {
 function toggleCategory(category) {
   const btn = document.querySelector(`.filter-btn[data-category="${category}"]`);
   categoryState[category] = !categoryState[category];
-  
+ 
   if (categoryState[category]) {
     btn.classList.add("active");
   } else {
@@ -403,9 +498,7 @@ function toggleCategory(category) {
 }
 </script>
 
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap"></script>
 
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitleTag">일반(성인) 안전 지도</title>
+<title>일반(성인) 안전 지도</title>
 
 <style>
 body {
@@ -34,8 +34,11 @@ body {
   font-weight: bold;
 }
 
-.back-btn:hover {
-  background-color: #5a6268;
+.back-btn:hover { background-color: #5a6268; }
+
+.map-wrapper {
+  position: relative;
+  width: 800px;
 }
 
 #map {
@@ -44,6 +47,34 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+.loading-overlay {
+  width: 800px;
+  height: 550px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 10;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #eee;
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: #888; font-size: 14px; }
 
 .legend {
   width: 800px;
@@ -54,10 +85,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.legend h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
+.legend h3 { margin-top: 0; margin-bottom: 12px; }
 
 .legend-grid {
   display: grid;
@@ -65,10 +93,7 @@ body {
   gap: 10px 20px;
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-}
+.legend-item { display: flex; align-items: center; }
 
 .legend-item img {
   width: 32px;
@@ -76,25 +101,25 @@ body {
   margin-right: 12px;
 }
 
-.legend-text {
-  font-size: 15px;
-  color: #333;
+.legend-text { font-size: 15px; color: #333; }
+
+.error-box {
+  width: 800px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #856404;
+  margin-top: 10px;
+  display: none;
 }
 
 @media (max-width: 850px) {
-  .header-bar,
-  #map,
-  .legend {
-    width: 95%;
-  }
-
-  #map {
-    height: 500px;
-  }
-
-  .legend-grid {
-    grid-template-columns: 1fr;
-  }
+  .header-bar, .map-wrapper, #map, .loading-overlay, .legend, .error-box { width: 95%; }
+  #map { height: 500px; }
+  .loading-overlay { width: 100%; height: 500px; }
+  .legend-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -102,68 +127,92 @@ body {
 <body>
 
 <div class="header-bar">
-  <h2 id="pageTitle">일반(성인) 안전 지도</h2>
-
-  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">
-    🏠 홈으로
-  </button>
+  <h2>일반(성인) 안전 지도</h2>
+  <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
-<div id="map"></div>
+<div class="map-wrapper">
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">지도를 불러오는 중입니다...</div>
+  </div>
+  <div id="map"></div>
+</div>
+
+<div class="error-box" id="errorBox"></div>
 
 <div class="legend">
-  <h3 id="legendTitle">📍 지도 마커 안내</h3>
-
-  <div class="legend-grid legend-list">
+  <h3>📍 지도 마커 안내</h3>
+  <div class="legend-grid">
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/149/149852.png">
-      <span class="legend-text" id="cctvText">📷 CCTV 설치 위치</span>
+      <span class="legend-text">📷 CCTV 설치 위치</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-      <span class="legend-text" id="streetText">💡 가로등 위치</span>
+      <span class="legend-text">💡 가로등 위치</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
-      <span class="legend-text" id="crowdHighText">👥 유동인구 많은 곳</span>
+      <span class="legend-text">👥 유동인구 많은 곳</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
-      <span class="legend-text" id="crowdLowText">🚶 유동인구 적은 곳</span>
+      <span class="legend-text">🚶 유동인구 적은 곳</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/296/296216.png">
-      <span class="legend-text" id="accidentText">🚗 교통사고 다발 구역</span>
+      <span class="legend-text">🚗 교통사고 다발 구역</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
-      <span class="legend-text" id="crimeText">⚠️ 범죄 발생 구역</span>
+      <span class="legend-text">⚠️ 범죄 발생 구역</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <span class="legend-text" id="hospitalText">🏥 병원</span>
+      <span class="legend-text">🏥 병원</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text" id="fireText">🚒 소방서</span>
+      <span class="legend-text">🚒 소방서</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-      <span class="legend-text" id="policeText">👮 경찰서</span>
+      <span class="legend-text">👮 경찰서</span>
     </div>
 
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/619/619153.png">
-      <span class="legend-text" id="shelterText">🏠 지킴이집</span>
+      <span class="legend-text">🏠 지킴이집</span>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
+      <span class="legend-text">🛤️ 골목길 (폭 좁은 구간)</span>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
+      <span class="legend-text">🏚️ 공사장·공폐가</span>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
+      <span class="legend-text">🧒 어린이 보호 구역</span>
+    </div>
+
+    <div class="legend-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
+      <span class="legend-text">📌 사용자 지정 장소</span>
     </div>
 
   </div>
@@ -171,23 +220,119 @@ body {
 
 <script>
 let map;
+const errors = [];
+let loadedCount = 0;
+const fireMarkers = [];
+const hospitalMarkers = [];
+
 function initMap() {
-  map = new google.maps.Map(
-    document.getElementById("map"),
-    {
-      zoom: 11,
-      center: {
-        lat: 37.5665,
-        lng: 126.9780
+  const bounds = new google.maps.LatLngBounds();
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 11,
+    center: { lat: 37.5665, lng: 126.9780 },
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+  });
+
+  const totalLayers = 3;
+
+  function layerDone(name, isError) {
+    loadedCount++;
+    if (isError) errors.push(name);
+    document.getElementById("loadingText").textContent =
+      `[${loadedCount}/${totalLayers}] ${name} ${isError ? "로드 실패" : "완료"}...`;
+
+    if (loadedCount >= totalLayers) {
+      document.getElementById("loadingOverlay").style.display = "none";
+      if (errors.length > 0) {
+        const box = document.getElementById("errorBox");
+        box.style.display = "block";
+        box.innerHTML = `⚠️ 일부 데이터를 불러오지 못했어요: <b>${errors.join(", ")}</b>`;
       }
     }
-  );
+  }
+
+  // 소방서
+  fetch("https://api.odcloud.kr/api/15138232/v1/uddi:da0c6c93-f05a-453d-849f-e4c3697222e3?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c")
+    .then(res => res.json())
+    .then(data => {
+      (data.data || []).forEach(p => {
+        const lat = parseFloat(p["X좌표"]);
+        const lng = parseFloat(p["Y좌표"]);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const marker = new google.maps.Marker({
+          position: { lat, lng }, map,
+          title: "소방서",
+          icon: { url: "https://cdn-icons-png.flaticon.com/512/2776/2776067.png", scaledSize: new google.maps.Size(36, 36) }
+        });
+        const iw = new google.maps.InfoWindow({
+          content: `<div style="padding:8px;"><strong>🚒 소방서</strong><br><small>${p["주소"] || ""}</small></div>`
+        });
+        marker.addListener("click", () => iw.open(map, marker));
+        fireMarkers.push(marker);
+        bounds.extend({ lat, lng });
+      });
+      layerDone("소방서", false);
+    })
+    .catch(() => layerDone("소방서", true));
+
+  // 병원
+  fetch("./hospital.xml")
+    .then(res => { if (!res.ok) throw new Error(); return res.text(); })
+    .then(xmlText => {
+      const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+      xml.querySelectorAll("row").forEach(r => {
+        const lat = parseFloat(r.querySelector("WGS84LAT")?.textContent);
+        const lng = parseFloat(r.querySelector("WGS84LON")?.textContent);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const name = r.querySelector("DUTYNAME")?.textContent || "병원";
+        const marker = new google.maps.Marker({
+          position: { lat, lng }, map, title: name,
+          icon: { url: "https://cdn-icons-png.flaticon.com/512/2785/2785482.png", scaledSize: new google.maps.Size(36, 36) }
+        });
+        const iw = new google.maps.InfoWindow({
+          content: `<div style="padding:8px;"><strong>🏥 ${name}</strong></div>`
+        });
+        marker.addListener("click", () => iw.open(map, marker));
+        hospitalMarkers.push(marker);
+        bounds.extend({ lat, lng });
+      });
+      layerDone("병원", false);
+    })
+    .catch(() => layerDone("병원", true));
+
+  // 가로등
+  fetch("https://api.data.go.kr/openapi/tn_pubr_public_streetlght_info_api?pageNo=1&numOfRows=100&type=json&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c")
+    .then(res => res.json())
+    .then(result => {
+      const items = result.response?.body?.items || [];
+      items.forEach(place => {
+        const lat = parseFloat(place["latitude"]);
+        const lng = parseFloat(place["longitude"]);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const name = place["rdnmadr"] || place["lnmadr"] || "가로등";
+        const marker = new google.maps.Marker({
+          position: { lat, lng }, map, title: name,
+          icon: { url: "https://cdn-icons-png.flaticon.com/512/3175/3175150.png", scaledSize: new google.maps.Size(36, 36) }
+        });
+        const iw = new google.maps.InfoWindow({
+          content: `<div style="padding:8px;"><strong>💡 가로등</strong><br><small>${name}</small></div>`
+        });
+        marker.addListener("click", () => iw.open(map, marker));
+        bounds.extend({ lat, lng });
+      });
+      layerDone("가로등", false);
+    })
+    .catch(() => layerDone("가로등", true));
 }
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
-
-<script src="language.js"></script>
+<!-- Google Maps API -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+</script>
 
 </body>
 </html>

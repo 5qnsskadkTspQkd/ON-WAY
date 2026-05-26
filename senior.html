@@ -88,32 +88,11 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.legend h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-.legend-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 20px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-}
-
-.legend-item img {
-  width: 32px;
-  height: 32px;
-  margin-right: 12px;
-}
-
-.legend-text {
-  font-size: 15px;
-  color: #333;
-}
+.legend h3 { margin-top: 0; margin-bottom: 12px; }
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+.legend-item { display: flex; align-items: center; }
+.legend-item img { width: 32px; height: 32px; margin-right: 12px; }
+.legend-text { font-size: 15px; color: #333; }
 
 .error-box {
   width: 800px;
@@ -128,9 +107,7 @@ body {
 }
 
 @media (max-width: 850px) {
-  .header-bar, .map-wrapper, #map, .legend, .error-box {
-    width: 95%;
-  }
+  .header-bar, .map-wrapper, #map, .legend, .error-box { width: 95%; }
   #map { height: 500px; }
   .loading-overlay { width: 100%; }
   .legend-grid { grid-template-columns: 1fr; }
@@ -158,47 +135,14 @@ body {
 <div class="legend">
   <h3 id="legendTitle">📍 지도 마커 안내</h3>
   <div class="legend-grid">
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/7096/7096518.png">
-      <div class="legend-text" id="benchText">🪑 벤치·쉼터</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/3050/3050451.png">
-      <div class="legend-text" id="toiletText">🚻 화장실</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/4003/4003836.png">
-      <div class="legend-text" id="flatroadText">🚶 평지 구간</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991589.png">
-      <div class="legend-text" id="elevatorText">🛗 지하철역 승강기</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/3209/3209158.png">
-      <div class="legend-text" id="escalatorText">🔼 지하철역 에스컬레이터</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2780/2780887.png">
-      <div class="legend-text" id="rampText">♿ 휠체어 경사로</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <div class="legend-text" id="medicalText">🏥 의료복지시설</div>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png">
-      <div class="legend-text" id="coolshelterText">☀️ 무더위쉼터</div>
-    </div>
-
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/7096/7096518.png"><div class="legend-text" id="benchText">🪑 벤치·쉼터</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/3050/3050451.png"><div class="legend-text" id="toiletText">🚻 화장실</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/4003/4003836.png"><div class="legend-text" id="flatroadText">🚶 평지 구간</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/2991/2991589.png"><div class="legend-text" id="elevatorText">🛗 지하철역 승강기</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/3209/3209158.png"><div class="legend-text" id="escalatorText">🔼 지하철역 에스컬레이터</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/2780/2780887.png"><div class="legend-text" id="rampText">♿ 휠체어 경사로</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png"><div class="legend-text" id="medicalText">🏥 의료복지시설</div></div>
+    <div class="legend-item"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png"><div class="legend-text" id="coolshelterText">☀️ 무더위쉼터</div></div>
   </div>
 </div>
 
@@ -206,53 +150,52 @@ body {
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 
 <script>
-const FILES = {
-  bench:       "bench.csv",
-  toilet:      "toilet_elder.csv",
-  flatroad:    "flatroad.csv",
-  elevator:    "elevator.csv",
-  escalator:   "escalator.csv",
-  ramp:        "ramp_elder.csv",
-  medical:     "medical.csv",
-  coolshelter: "coolshelter.csv",
+window.ElderlyMapApp = {
+  FILES: {
+    bench:       "bench.csv",
+    toilet:      "toilet_elder.csv",
+    flatroad:    "flatroad.csv",
+    elevator:    "elevator.csv",
+    escalator:   "escalator.csv",
+    ramp:        "ramp_elder.csv",
+    medical:     "medical.csv",
+    coolshelter: "coolshelter.xml" 
+  },
+  layerMarkers: {
+    bench: [], toilet: [], flatroad: [], elevator: [],
+    escalator: [], ramp: [], medical: [], coolshelter: []
+  },
+  googleMapInstance: null,
+  loadedCount: 0,
+  totalLayers: 8, 
+  errors: [],
+  ICONS: {}
 };
 
-const layerMarkers = {
-  bench: [], toilet: [], flatroad: [], elevator: [],
-  escalator: [], ramp: [], medical: [], coolshelter: []
-};
-
-let map;
-let loadedCount = 0;
-const totalLayers = Object.keys(FILES).length;
-const errors = [];
-let ICONS = {}; // 구글 SDK 바인딩 지연 에러를 막기 위해 초기 객체만 비워둠
-
-function makeCircleIcon(color, size = 7) {
-  return {
+function initMap() {
+  const app = window.ElderlyMapApp;
+  
+  // 기존 원형 심볼 정의
+  const makeCircle = (color) => ({
     path: google.maps.SymbolPath.CIRCLE,
-    scale: size,
+    scale: 7,
     fillColor: color,
     fillOpacity: 0.88,
     strokeColor: "#fff",
-    strokeWeight: 1.5,
-  };
-}
+    strokeWeight: 1.5
+  });
 
-function initMap() {
-  // 구글 맵 API 로드가 완전히 완료된 이 시점에 스타일 서클 객체 빌드 (안전성 확보)
-  ICONS = {
-    bench:       makeCircleIcon("#ff8f00", 7),
-    toilet:      makeCircleIcon("#00838f", 7),
-    flatroad:    makeCircleIcon("#66bb6a", 7),
-    elevator:    makeCircleIcon("#1e88e5", 8),
-    escalator:   makeCircleIcon("#42a5f5", 7),
-    ramp:        makeCircleIcon("#7b9ed9", 7),
-    medical:     makeCircleIcon("#e53935", 9),
-    coolshelter: makeCircleIcon("#ef6c00", 8),
+  app.ICONS = {
+    bench:       makeCircle("#ff8f00"),
+    toilet:      makeCircle("#00838f"),
+    flatroad:    makeCircle("#66bb6a"),
+    elevator:    makeCircle("#1e88e5"),
+    escalator:   makeCircle("#42a5f5"),
+    ramp:        makeCircle("#7b9ed9"),
+    medical:     makeCircle("#e53935")
   };
 
-  map = new google.maps.Map(document.getElementById("map"), {
+  app.googleMapInstance = new google.maps.Map(document.getElementById("map"), {
     zoom: 11,
     center: { lat: 37.5665, lng: 126.9780 },
     mapTypeControl: false,
@@ -264,34 +207,100 @@ function initMap() {
 }
 
 function loadAllLayers() {
+  const app = window.ElderlyMapApp;
   updateLoadingText();
 
-  // 안전하게 동적 로드된 ICONS 스타일 매핑 연동
-  const layers = [
-    { key: "bench",       icon: ICONS.bench,       emoji: "🪑", label: "벤치·쉼터",            done: "벤치·쉼터" },
-    { key: "toilet",      icon: ICONS.toilet,      emoji: "🚻", label: "화장실",               done: "화장실" },
-    { key: "flatroad",    icon: ICONS.flatroad,    emoji: "🚶", label: "평지 구간",             done: "평지 구간" },
-    { key: "elevator",    icon: ICONS.elevator,    emoji: "🛗", label: "지하철역 승강기",       done: "승강기" },
-    { key: "escalator",   icon: ICONS.escalator,   emoji: "🔼", label: "지하철역 에스컬레이터", done: "에스컬레이터" },
-    { key: "ramp",        icon: ICONS.ramp,        emoji: "♿", label: "휠체어 경사로",         done: "경사로" },
-    { key: "medical",     icon: ICONS.medical,     emoji: "🏥", label: "의료복지시설",          done: "의료복지시설" },
-    { key: "coolshelter", icon: ICONS.coolshelter, emoji: "☀️", label: "무더위쉼터",           done: "무더위쉼터" },
+  const csvLayers = [
+    { key: "bench",       icon: app.ICONS.bench,       emoji: "🪑", label: "벤치·쉼터" },
+    { key: "toilet",      icon: app.ICONS.toilet,      emoji: "🚻", label: "화장실" },
+    { key: "flatroad",    icon: app.ICONS.flatroad,    emoji: "🚶", label: "평지 구간" },
+    { key: "elevator",    icon: app.ICONS.elevator,    emoji: "🛗", label: "지하철역 승강기" },
+    { key: "escalator",   icon: app.ICONS.escalator,   emoji: "🔼", label: "지하철역 에스컬레이터" },
+    { key: "ramp",        icon: app.ICONS.ramp,        emoji: "♿", label: "휠체어 경사로" },
+    { key: "medical",     icon: app.ICONS.medical,     emoji: "🏥", label: "의료복지시설" }
   ];
 
-  layers.forEach(({ key, icon, emoji, label, done }) => {
-    loadCSV(FILES[key], (rows) => {
-      rows.forEach(({ name, lat, lng }) => {
-        addMarker(key, lat, lng, `${emoji} ${name}`, `${label}<br>위도: ${lat.toFixed(6)}<br>경도: ${lng.toFixed(6)}`, icon);
-      });
-      layerDone(done);
-    });
+  csvLayers.forEach(({ key, icon, emoji, label }) => {
+    loadCSV(app.FILES[key], 
+      (rows) => {
+        rows.forEach(({ name, lat, lng }) => {
+          // 기존 CSV용 구글 순정 마커 생성 라인
+          const marker = new google.maps.Marker({
+            position: { lat, lng },
+            map: app.googleMapInstance,
+            title: name,
+            icon: icon
+          });
+          bindInfoWindow(marker, `<strong>${emoji} ${name}</strong><br><span style='color:#888'>${label}</span>`);
+          app.layerMarkers[key].push(marker);
+        });
+      }, 
+      () => { layerDone(label); }, 
+      (url) => { app.errors.push(url); layerDone(url); }
+    );
   });
+
+  // 무더위쉼터 XML 로더 기동
+  loadLocalXMLShelter();
 }
 
-function loadCSV(url, callback) {
+// [핵심 수정] 요청하신 코드 방식대로 외부 이미지 주소와 크기를 제어하는 XML 전용 마커 빌더
+function loadLocalXMLShelter() {
+  const app = window.ElderlyMapApp;
+  const xmlFileUrl = app.FILES.coolshelter;
+
+  fetch(xmlFileUrl)
+    .then(res => {
+      if (!res.ok) throw new Error(xmlFileUrl);
+      return res.text();
+    })
+    .then(xmlText => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+      
+      let rows = xmlDoc.getElementsByTagName("row");
+      if (rows.length === 0) rows = xmlDoc.getElementsByTagName("ROW");
+
+      for (let i = 0; i < rows.length; i++) {
+        const rowNode = rows[i];
+        
+        // 새로 지정한 SftcltrShelter API 규격 태그 파싱 (위도: LA, 경도: LO, 시설명: NAME)
+        const latText = rowNode.getElementsByTagName("LAT")[0]?.textContent;
+const lngText = rowNode.getElementsByTagName("LON")[0]?.textContent;
+const nameText = rowNode.getElementsByTagName("R_AREA_NM")[0]?.textContent || "무더위쉼터";
+const addrText = rowNode.getElementsByTagName("R_DETL_ADD")[0]?.textContent || "";
+        const lat = parseFloat(latText);
+        const lng = parseFloat(lngText);
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // ★ 요청하신 구글 맵스 마커 인스턴스 생성 방식 완벽 적용 ★
+          const marker = new google.maps.Marker({
+            position: { lat, lng },
+            map: app.googleMapInstance,
+            title: nameText.trim(),
+            icon: {
+              url: "https://cdn-icons-png.flaticon.com/512/1946/1946429.png", // 무더위쉼터 태양 집 아이콘
+              scaledSize: new google.maps.Size(32, 32) // 깔끔한 표출을 위해 32x32 크기 지정
+            }
+          });
+
+          bindInfoWindow(marker, `<strong>☀️ ${nameText.trim()}</strong><br><span style='color:#666; font-size:12px;'>${addrText.trim()}</span>`);
+          app.layerMarkers.coolshelter.push(marker);
+        }
+      }
+      layerDone("무더위쉼터");
+    })
+    .catch(err => {
+      console.warn("XML 로드 실패:", err);
+      app.errors.push(xmlFileUrl);
+      layerDone("무더위쉼터");
+    });
+}
+
+function loadCSV(url, onChunkSuccess, onComplete, onError) {
   fetch(url)
     .then(res => {
-      if (!res.ok) throw new Error(url + " 파일 없음");
+      if (!res.ok) throw new Error(url);
       return res.text();
     })
     .then(text => {
@@ -308,73 +317,50 @@ function loadCSV(url, callback) {
       const CHUNK = 2000;
       let idx = 0;
       function next() {
-        callback(parsed.slice(idx, idx + CHUNK));
+        onChunkSuccess(parsed.slice(idx, idx + CHUNK));
         idx += CHUNK;
         if (idx < parsed.length) setTimeout(next, 0);
+        else onComplete();
       }
       next();
     })
-    .catch(err => {
-      console.warn(err);
-      errors.push(url);
-      layerDone(url);
-    });
+    .catch(err => { console.warn(err); onError(url); });
 }
 
-function addMarker(layer, lat, lng, title, infoHTML, icon) {
-  const marker = new google.maps.Marker({
-    position: { lat, lng },
-    map: map,
-    title: title,
-    icon: icon,
-    visible: true,
-  });
+function bindInfoWindow(marker, htmlContent) {
   const iw = new google.maps.InfoWindow({
-    content: `<div style="padding:10px; font-family:'Malgun Gothic',sans-serif; color:#333; font-size:13px;">
-                <strong>${title}</strong><br>
-                <span style="color:#888; font-size:12px;">${infoHTML}</span>
-              </div>`
+    content: `<div style="padding:8px; font-family:'Malgun Gothic',sans-serif; font-size:13px; color:#333;">${htmlContent}</div>`
   });
-  marker.addListener("click", () => iw.open(map, marker));
-  layerMarkers[layer].push(marker);
+  marker.addListener("click", () => iw.open(window.ElderlyMapApp.googleMapInstance, marker));
 }
 
 function layerDone(name) {
-  loadedCount++;
+  const app = window.ElderlyMapApp;
+  app.loadedCount++;
   updateLoadingText(name);
-  if (loadedCount >= totalLayers) {
+  if (app.loadedCount >= app.totalLayers) {
     document.getElementById("loadingOverlay").style.display = "none";
-    if (errors.length > 0) {
+    if (app.errors.length > 0) {
       const box = document.getElementById("errorBox");
       box.style.display = "block";
-      box.innerHTML = `⚠️ 아래 파일을 찾을 수 없어요. HTML과 같은 폴더에 있는지 확인해주세요!<br><b>${errors.join(", ")}</b>`;
+      box.innerHTML = `⚠️ <b>누락된 파일 알림:</b> ${app.errors.join(", ")}<br><span style='font-size:11px; color:#aa7700;'>* 무더위쉼터(XML) 외 나머지 CSV 파일들이 준비되면 이 메시지는 사라집니다.</span>`;
     }
-
-    // [성능 조율] 비동기 대용량 분할 로드가 완료된 마커 전체를 마커 클러스터러에 주입
     if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
-      const allMarkers = Object.values(layerMarkers).flat();
-      new markerClusterer.MarkerClusterer({ map, markers: allMarkers });
+      const allMarkers = Object.values(app.layerMarkers).flat();
+      new markerClusterer.MarkerClusterer({ map: app.googleMapInstance, markers: allMarkers });
     }
   }
 }
 
 function updateLoadingText(lastName) {
+  const app = window.ElderlyMapApp;
   document.getElementById("loadingText").textContent = lastName
-    ? `[${loadedCount}/${totalLayers}] ${lastName} 데이터 로드 완료...`
+    ? `[${app.loadedCount}/${app.totalLayers}] ${lastName} 데이터 로드 완료...`
     : "데이터를 불러오는 중입니다...";
 }
-
-// 브라우저가 화면 요소 구조(DOM)를 모두 렌더링한 직후 다국어 번역을 안전하게 주입
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof applyLanguage === "function") {
-    applyLanguage("elder");
-  }
-});
 </script>
 
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
-</script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap"></script>
 
 </body>
 </html>
