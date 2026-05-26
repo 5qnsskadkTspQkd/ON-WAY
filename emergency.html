@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">응급환자 안전 지도</title>
+<title>응급환자 안전 지도</title>
+
 
 <style>
 body {
@@ -16,6 +17,7 @@ body {
   background-color: #f5f6f7;
 }
 
+
 .header-bar {
   width: 800px;
   display: flex;
@@ -23,6 +25,7 @@ body {
   align-items: center;
   margin-bottom: 15px;
 }
+
 
 .back-btn {
   background-color: #6c757d;
@@ -34,9 +37,6 @@ body {
   font-weight: bold;
 }
 
-.back-btn:hover {
-  background-color: #5a6268;
-}
 
 #map {
   width: 800px;
@@ -45,19 +45,15 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
+
 .legend {
   width: 800px;
   margin-top: 15px;
   background: white;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.legend h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
 
 .legend-item {
   display: flex;
@@ -65,44 +61,43 @@ body {
   margin-bottom: 10px;
 }
 
+
 .legend-item img {
   width: 32px;
   height: 32px;
   margin-right: 12px;
 }
-
-@media (max-width: 850px) {
-  .header-bar, .legend, #map {
-    width: 95%;
-  }
-  #map {
-    height: 500px;
-  }
-}
 </style>
 </head>
 
+
 <body>
+
 
 <div class="header-bar">
   <h2 id="mapTitle">응급환자 안전 지도</h2>
   <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
+
 <div id="map"></div>
+
 
 <div class="legend">
   <h3 id="legendTitle">📍 지도 마커 안내</h3>
+
 
   <div class="legend-item">
     <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
     <div id="fireText">🚒 소방서 및 안전센터</div>
   </div>
 
+
   <div class="legend-item">
     <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
     <div id="hospitalText">🏥 병원</div>
   </div>
+
 
   <div class="legend-item">
     <img src="https://cdn-icons-png.flaticon.com/512/2967/2967350.png">
@@ -110,113 +105,140 @@ body {
   </div>
 </div>
 
-<script src="language.js"></script>
 
 <script>
 let fireMarkers = [];
 let hospitalMarkers = [];
 
+
 function initMap() {
+
+
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: { lat: 36.5, lng: 127.8 }
   });
 
+
   const bounds = new google.maps.LatLngBounds();
 
-  // 안전장치: translations 객체가 로드되지 않았을 때를 대비한 기본값 처리
+
   const lang = localStorage.getItem("language") || "ko";
-  const t = (window.translations && window.translations[lang]) ? window.translations[lang].moveweak : {};
+  const t = translations[lang].moveweak;
 
-  // 두 비동기 통신(소방서 API, 병원 XML)을 묶어서 동기화 관리
-  const fetchFireStations = fetch("https://api.odcloud.kr/api/15138232/v1/uddi:da0c6c93-f05a-453d-849f-e4c3697222e3?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c")
-    .then(res => res.json())
-    .then(data => {
-      if (!data || !data.data) return;
-      data.data.forEach(p => {
-        // 공공데이터 좌표 특성에 따라 데이터가 안 맞으면 lat과 lng의 X좌표/Y좌표 대입을 서로 바꾸세요.
-        const lat = parseFloat(p["X좌표"]);
-        const lng = parseFloat(p["Y좌표"]);
 
-        if (isNaN(lat) || isNaN(lng)) return;
+  // 🔥 소방서
+  fetch("https://api.odcloud.kr/api/15138232/v1/uddi:da0c6c93-f05a-453d-849f-e4c3697222e3?page=1&perPage=100&serviceKey=a26e5868693aaa5bb14e7ced5a1880e7e7a2eb60b86200cb76a2e85aba3aba1c")
+  .then(res => res.json())
+  .then(data => {
 
-        const name = t.fireMarker || "소방서/안전센터";
 
-        const marker = new google.maps.Marker({
-          position: { lat, lng },
-          map,
-          title: name,
-          icon: {
-            url: "https://cdn-icons-png.flaticon.com/512/2776/2776067.png",
-            scaledSize: new google.maps.Size(40, 40)
-          }
-        });
+    data.data.forEach(p => {
 
-        const infowindow = new google.maps.InfoWindow({
-          content: `<div style="padding:5px;"><strong>${name}</strong><br>${p["주소"] || ""}</div>`
-        });
 
-        marker.addListener("click", () => infowindow.open(map, marker));
+      const lat = parseFloat(p["X좌표"]);
+      const lng = parseFloat(p["Y좌표"]);
 
-        bounds.extend({ lat, lng });
-        fireMarkers.push(marker);
+
+      if (isNaN(lat) || isNaN(lng)) return;
+
+
+      const name = t.fireMarker || "Fire Station";
+
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map,
+        title: name,
+        icon: {
+          url: "https://cdn-icons-png.flaticon.com/512/2776/2776067.png",
+          scaledSize: new google.maps.Size(40, 40)
+        }
       });
-    }).catch(err => console.error("소방서 데이터 로드 실패:", err));
 
-  const fetchHospitals = fetch("./hospital.xml")
-    .then(res => res.text())
-    .then(xmlText => {
-      const xml = new DOMParser().parseFromString(xmlText, "text/xml");
-      const rows = xml.querySelectorAll("row");
 
-      rows.forEach(r => {
-        const lat = parseFloat(r.querySelector("WGS84LAT")?.textContent);
-        const lng = parseFloat(r.querySelector("WGS84LON")?.textContent);
-
-        if (isNaN(lat) || isNaN(lng)) return;
-
-        const name = r.querySelector("DUTYNAME")?.textContent || (t.hospitalMarker || "병원");
-
-        const marker = new google.maps.Marker({
-          position: { lat, lng },
-          map,
-          title: name,
-          icon: {
-            url: "https://cdn-icons-png.flaticon.com/512/2785/2785482.png",
-            scaledSize: new google.maps.Size(40, 40)
-          }
-        });
-
-        const infowindow = new google.maps.InfoWindow({
-          content: `<div style="padding:5px;"><strong>${name}</strong></div>`
-        });
-
-        marker.addListener("click", () => infowindow.open(map, marker));
-
-        bounds.extend({ lat, lng });
-        hospitalMarkers.push(marker);
+      const infowindow = new google.maps.InfoWindow({
+        content: `<div><strong>${name}</strong><br>${p["주소"] || ""}</div>`
       });
-    }).catch(err => console.error("병원 데이터 로드 실패:", err));
 
-  // 💡 두 데이터가 완전히 화면에 다 매핑된 후 딱 한 번만 카메라 경계 조절 수행
-  Promise.all([fetchFireStations, fetchHospitals]).then(() => {
-    if (!bounds.isEmpty()) {
-      map.fitBounds(bounds);
-    }
+
+      marker.addListener("click", () => infowindow.open(map, marker));
+
+
+      bounds.extend({ lat, lng });
+      fireMarkers.push(marker);
+    });
+
+
   });
-}
 
-// DOM이 완벽히 가동된 후 안전하게 번역 반영
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof applyLanguage === "function") {
-    applyLanguage("moveweak");
-  }
-});
+
+  // 🏥 병원
+  fetch("./hospital.xml")
+  .then(res => res.text())
+  .then(xmlText => {
+
+
+    const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+    const rows = xml.querySelectorAll("row");
+
+
+    rows.forEach(r => {
+
+
+      const lat = parseFloat(r.querySelector("WGS84LAT")?.textContent);
+      const lng = parseFloat(r.querySelector("WGS84LON")?.textContent);
+
+
+      if (isNaN(lat) || isNaN(lng)) return;
+
+
+      const name = r.querySelector("DUTYNAME")?.textContent || t.hospitalMarker;
+
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map,
+        title: name,
+        icon: {
+          url: "https://cdn-icons-png.flaticon.com/512/2785/2785482.png",
+          scaledSize: new google.maps.Size(40, 40)
+        }
+      });
+
+
+      const infowindow = new google.maps.InfoWindow({
+        content: `<div><strong>${name}</strong></div>`
+      });
+
+
+      marker.addListener("click", () => infowindow.open(map, marker));
+
+
+      bounds.extend({ lat, lng });
+      hospitalMarkers.push(marker);
+    });
+
+
+  });
+
+
+  if (!bounds.isEmpty()) map.fitBounds(bounds);
+}
 </script>
+
+
+<script src="language.js"></script>
+<script>
+applyLanguage("moveweak");
+</script>
+
 
 <script async defer
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
 </script>
 
+
 </body>
 </html>
+

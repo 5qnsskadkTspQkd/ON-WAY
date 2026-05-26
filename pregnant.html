@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>임산부 안전 지도</title>
-
 <style>
 body {
   font-family: 'Malgun Gothic', sans-serif;
@@ -15,7 +14,6 @@ body {
   align-items: center;
   background-color: #f5f6f7;
 }
-
 .header-bar {
   width: 800px;
   display: flex;
@@ -23,7 +21,6 @@ body {
   align-items: center;
   margin-bottom: 15px;
 }
-
 .back-btn {
   background-color: #6c757d;
   color: white;
@@ -33,21 +30,17 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
-
 .back-btn:hover { background-color: #5a6268; }
-
 .map-wrapper {
   position: relative;
   width: 800px;
 }
-
 #map {
   width: 800px;
   height: 550px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-
 .loading-overlay {
   width: 800px;
   height: 550px;
@@ -63,7 +56,6 @@ body {
   top: 0; left: 0;
   z-index: 10;
 }
-
 .loading-spinner {
   width: 40px;
   height: 40px;
@@ -72,10 +64,8 @@ body {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-text { color: #888; font-size: 14px; }
-
 .legend {
   width: 800px;
   margin-top: 15px;
@@ -84,25 +74,19 @@ body {
   padding: 15px 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
-
 .legend h3 { margin-top: 0; margin-bottom: 12px; }
-
 .legend-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 20px;
 }
-
 .legend-item { display: flex; align-items: center; }
-
 .legend-item img {
   width: 32px;
   height: 32px;
   margin-right: 12px;
 }
-
 .legend-text { font-size: 15px; color: #333; }
-
 .error-box {
   width: 800px;
   background: #fff3cd;
@@ -114,7 +98,6 @@ body {
   margin-top: 10px;
   display: none;
 }
-
 @media (max-width: 850px) {
   .header-bar, .map-wrapper, #map, .loading-overlay, .legend, .error-box { width: 95%; }
   #map { height: 500px; }
@@ -123,12 +106,11 @@ body {
 }
 </style>
 </head>
-
 <body>
 
 <div class="header-bar">
-  <h2>임산부 안전 지도</h2>
-  <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+  <h2 id="mapTitle">임산부 안전 지도</h2>
+  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
 <div class="map-wrapper">
@@ -142,61 +124,144 @@ body {
 <div class="error-box" id="errorBox"></div>
 
 <div class="legend">
-  <h3>📍 지도 마커 안내</h3>
+  <h3 id="legendTitle">📍 지도 마커 안내</h3>
   <div class="legend-grid">
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2780/2780887.png">
-      <span class="legend-text">♿ 경사로 및 무장애 시설</span>
+      <span class="legend-text" id="marker0">♿ 경사로 및 무장애 시설</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <span class="legend-text">🏥 응급 의료 기관</span>
+      <span class="legend-text" id="marker1">🏥 응급 의료 기관</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2913/2913569.png">
-      <span class="legend-text">💊 약국</span>
+      <span class="legend-text" id="marker2">💊 약국</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/7096/7096518.png">
-      <span class="legend-text">🪑 휴식 공간 (벤치·쉼터)</span>
+      <span class="legend-text" id="marker3">🪑 휴식 공간 (벤치·쉼터)</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/3050/3050451.png">
-      <span class="legend-text">🚻 개방형 화장실</span>
+      <span class="legend-text" id="marker4">🚻 공중 화장실</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/3588/3588397.png">
-      <span class="legend-text">🤱 수유실</span>
+      <span class="legend-text" id="marker5">🤱 수유실</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/1048/1048313.png">
-      <span class="legend-text">🅿️ 임산부 우선 주차·배려구역</span>
+      <span class="legend-text" id="marker6">🅿️ 임산부 우선 주차·배려구역</span>
     </div>
-
     <div class="legend-item">
       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991589.png">
-      <span class="legend-text">🚇 지하철·대중교통 연계 시설</span>
+      <span class="legend-text" id="marker7">🚇 지하철·대중교통 연계 시설</span>
     </div>
-
   </div>
 </div>
 
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 
 <script>
+// ==========================================
+// 다국어 번역 데이터
+// ==========================================
+const PREGNANT_TRANSLATIONS = {
+  ko: {
+    title: "임산부 안전 지도",
+    home: "🏠 홈으로",
+    legend: "📍 지도 마커 안내",
+    loading: "데이터를 불러오는 중입니다...",
+    markers: [
+      "♿ 경사로 및 무장애 시설",
+      "🏥 응급 의료 기관",
+      "💊 약국",
+      "🪑 휴식 공간 (벤치·쉼터)",
+      "🚻 공중 화장실",
+      "🤱 수유실",
+      "🅿️ 임산부 우선 주차·배려구역",
+      "🚇 지하철·대중교통 연계 시설"
+    ]
+  },
+  en: {
+    title: "Pregnant Women Safety Map",
+    home: "🏠 Home",
+    legend: "📍 Map Marker Guide",
+    loading: "Loading data...",
+    markers: [
+      "♿ Ramps & Barrier-Free Facilities",
+      "🏥 Emergency Medical Facilities",
+      "💊 Pharmacies",
+      "🪑 Rest Areas (Benches/Shelters)",
+      "🚻 Public Restrooms",
+      "🤱 Nursing Rooms",
+      "🅿️ Priority Parking for Pregnant Women",
+      "🚇 Subway & Transit Facilities"
+    ]
+  },
+  ja: {
+    title: "妊産婦安全マップ",
+    home: "🏠 ホーム",
+    legend: "📍 マーカー案内",
+    loading: "データを読み込んでいます...",
+    markers: [
+      "♿ スロープ・バリアフリー施設",
+      "🏥 救急医療機関",
+      "💊 薬局",
+      "🪑 休憩スペース（ベンチ・シェルター）",
+      "🚻 公共トイレ",
+      "🤱 授乳室",
+      "🅿️ 妊産婦優先駐車・配慮エリア",
+      "🚇 地下鉄・公共交通連携施設"
+    ]
+  },
+  zh: {
+    title: "孕产妇安全地图",
+    home: "🏠 返回首页",
+    legend: "📍 地图标记说明",
+    loading: "正在加载数据...",
+    markers: [
+      "♿ 坡道及无障碍设施",
+      "🏥 急诊医疗机构",
+      "💊 药店",
+      "🪑 休息区（长椅·避难所）",
+      "🚻 公共厕所",
+      "🤱 哺乳室",
+      "🅿️ 孕产妇优先停车区",
+      "🚇 地铁·公共交通设施"
+    ]
+  }
+};
+
+// ==========================================
+// 언어 적용 함수
+// ==========================================
+function applyPregnantLanguage() {
+  const lang = localStorage.getItem("language") || "ko";
+  const t = PREGNANT_TRANSLATIONS[lang] || PREGNANT_TRANSLATIONS["ko"];
+
+  document.getElementById("mapTitle").textContent   = t.title;
+  document.getElementById("homeBtn").textContent    = t.home;
+  document.getElementById("legendTitle").textContent = t.legend;
+  document.getElementById("loadingText").textContent = t.loading;
+
+  t.markers.forEach(function(text, i) {
+    var el = document.getElementById("marker" + i);
+    if (el) el.textContent = text;
+  });
+}
+
+// 페이지 로드 즉시 언어 적용 (지도 뜨기 전에 텍스트부터 교체)
+applyPregnantLanguage();
+
+// ==========================================
+// 지도 관련 변수
+// ==========================================
 const FILES = {
   ramp:      "ramp.csv",
   emergency: "emergency.csv",
-  pharmacy:  "pharmacy.csv",
   rest:      "rest.csv",
-  toilet:    "toilet.csv",
   parking:   "parking.csv",
   transit:   "transit.csv",
 };
@@ -206,17 +271,17 @@ const LAYER_META = {
   emergency: { color: "#e53935", size: 9, emoji: "🏥", label: "응급 의료 기관" },
   pharmacy:  { color: "#43a047", size: 7, emoji: "💊", label: "약국" },
   rest:      { color: "#ff8f00", size: 7, emoji: "🪑", label: "휴식 공간" },
-  toilet:    { color: "#00838f", size: 7, emoji: "🚻", label: "개방형 화장실" },
+  toilet:    { color: "#00838f", size: 7, emoji: "🚻", label: "공중 화장실" },
   parking:   { color: "#6a1b9a", size: 7, emoji: "🅿️", label: "임산부 우선 주차" },
   transit:   { color: "#0277bd", size: 7, emoji: "🚇", label: "대중교통 연계 시설" },
 };
 
 const layerMarkers = {};
-Object.keys(FILES).forEach(k => layerMarkers[k] = []);
+Object.keys(LAYER_META).forEach(k => layerMarkers[k] = []);
 
 let map;
 let loadedCount = 0;
-const totalLayers = Object.keys(FILES).length;
+const totalLayers = Object.keys(FILES).length + 2;
 const errors = [];
 
 function makeIcon(color, size) {
@@ -240,9 +305,10 @@ function initMap() {
   });
 
   Object.keys(FILES).forEach(key => loadCSV(key));
+  loadPharmacyAPI();
+  loadToiletAPI();
 }
 
-// ── CSV 로드: 성공/실패 모두 layerDone() 호출 보장 ──
 function loadCSV(key) {
   fetch(FILES[key])
     .then(res => {
@@ -252,65 +318,99 @@ function loadCSV(key) {
     .then(text => {
       const lines = text.trim().split("\n").slice(1);
       const parsed = [];
-
       for (const line of lines) {
         const cols = line.split(",");
         if (cols.length < 3) continue;
-
-        const name = cols[0].trim();
-        const lat  = parseFloat(cols[1]);
-        const lng  = parseFloat(cols[2]);
+        const lat = parseFloat(cols[1]);
+        const lng = parseFloat(cols[2]);
         if (isNaN(lat) || isNaN(lng)) continue;
-
-        // toilet.csv 는 4번째 열로 수유실 구분
-        if (key === "toilet" && cols.length >= 4 && cols[3].trim().toLowerCase() === "nursing") {
-          parsed.push({ name, lat, lng, isNursing: true });
-        } else {
-          parsed.push({ name, lat, lng, isNursing: false });
-        }
+        parsed.push({ name: cols[0].trim(), lat, lng });
       }
-
-      // 청크 처리 후 맨 마지막에만 layerDone 호출
       const CHUNK = 500;
       let idx = 0;
       function nextChunk() {
-        parsed.slice(idx, idx + CHUNK).forEach(({ name, lat, lng, isNursing }) => {
-          const meta  = isNursing
-            ? { color: "#e91e8c", size: 7, emoji: "🤱", label: "수유실" }
-            : LAYER_META[key];
-          addMarker(key, lat, lng, name, meta);
+        parsed.slice(idx, idx + CHUNK).forEach(({ name, lat, lng }) => {
+          addMarker(key, lat, lng, name, LAYER_META[key]);
         });
         idx += CHUNK;
-        if (idx < parsed.length) {
-          setTimeout(nextChunk, 0);
-        } else {
-          layerDone(key, false); // ✅ 청크 완료 후 딱 한 번만 호출
-        }
+        if (idx < parsed.length) setTimeout(nextChunk, 0);
+        else layerDone(key, false);
       }
       nextChunk();
     })
     .catch(err => {
-      console.warn("로드 실패:", err.message);
+      console.warn("CSV 로드 실패:", err.message);
       errors.push(FILES[key]);
-      layerDone(key, true); // ✅ 실패해도 반드시 호출
+      layerDone(key, true);
+    });
+}
+
+function loadPharmacyAPI() {
+  const key = "71634f54626e617936384265515763";
+  const url = `http://openapi.seoul.go.kr:8088/${key}/json/TbPharmacyOperateInfo/1/500/`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("약국 API 네트워크 오류");
+      return res.json();
+    })
+    .then(data => {
+      const rows = data?.TbPharmacyOperateInfo?.row || [];
+      rows.forEach(p => {
+        const lat  = parseFloat(p["WGS84LAT"] || p["LATITUDE"]);
+        const lng  = parseFloat(p["WGS84LON"] || p["LONGITUDE"]);
+        const name = p["DUTYNAME"] || "약국";
+        if (isNaN(lat) || isNaN(lng)) return;
+        addMarker("pharmacy", lat, lng, name, LAYER_META["pharmacy"]);
+      });
+      layerDone("pharmacy", false);
+    })
+    .catch(err => {
+      console.warn("약국 API 실패:", err);
+      errors.push("약국 API");
+      layerDone("pharmacy", true);
+    });
+}
+
+function loadToiletAPI() {
+  const key = "58757579456e6179313033454c637a44";
+  const url = `http://openapi.seoul.go.kr:8088/${key}/json/mgisToiletPoi/1/500/`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("화장실 API 네트워크 오류");
+      return res.json();
+    })
+    .then(data => {
+      const rows = data?.mgisToiletPoi?.row || [];
+      rows.forEach(p => {
+        const lat  = parseFloat(p["COT_CONTS_Y"] || p["WGS84LAT"]);
+        const lng  = parseFloat(p["COT_CONTS_X"] || p["WGS84LON"]);
+        const name = p["FNAME"] || p["TOILET_NM"] || "공중 화장실";
+        if (isNaN(lat) || isNaN(lng)) return;
+        addMarker("toilet", lat, lng, name, LAYER_META["toilet"]);
+      });
+      layerDone("toilet", false);
+    })
+    .catch(err => {
+      console.warn("화장실 API 실패:", err);
+      errors.push("화장실 API");
+      layerDone("toilet", true);
     });
 }
 
 function addMarker(key, lat, lng, name, meta) {
+  if (!meta) return;
   const marker = new google.maps.Marker({
     position: { lat, lng },
     map,
     title: name,
     icon: makeIcon(meta.color, meta.size),
   });
-
   const iw = new google.maps.InfoWindow({
     content: `<div style="padding:8px 10px; font-family:'Malgun Gothic',sans-serif; min-width:160px;">
                 <strong>${meta.emoji} ${name}</strong><br>
                 <span style="color:#888; font-size:12px;">${meta.label}</span>
               </div>`
   });
-
   marker.addListener("click", () => iw.open(map, marker));
   layerMarkers[key].push(marker);
 }
@@ -318,8 +418,10 @@ function addMarker(key, lat, lng, name, meta) {
 function layerDone(key, isError) {
   loadedCount++;
   const meta = LAYER_META[key] || { emoji: "📂", label: key };
+  const lang = localStorage.getItem("language") || "ko";
+  const t = PREGNANT_TRANSLATIONS[lang] || PREGNANT_TRANSLATIONS["ko"];
   document.getElementById("loadingText").textContent =
-    `[${loadedCount}/${totalLayers}] ${meta.emoji} ${meta.label} ${isError ? "없음" : "완료"}...`;
+    `[${loadedCount}/${totalLayers}] ${meta.emoji} ${meta.label} ${isError ? "실패" : "완료"}...`;
 
   if (loadedCount >= totalLayers) {
     document.getElementById("loadingOverlay").style.display = "none";
@@ -327,21 +429,23 @@ function layerDone(key, isError) {
     if (errors.length > 0) {
       const box = document.getElementById("errorBox");
       box.style.display = "block";
-      box.innerHTML = `⚠️ 아래 CSV 파일을 찾지 못했어요. HTML과 같은 폴더에 넣어주세요.<br>
+      box.innerHTML = `⚠️ 아래 데이터를 불러오지 못했어요.<br>
         <b>${errors.join(", ")}</b><br>
-        <small style="color:#aaa;">파일 없어도 지도는 정상 표시됩니다.</small>`;
+        <small style="color:#aaa;">Live Server로 실행 중인지 확인해주세요. (VS Code → 우클릭 → Open with Live Server)</small>`;
     }
 
     if (window.markerClusterer?.MarkerClusterer) {
       const all = Object.values(layerMarkers).flat();
-      if (all.length > 0) new markerClusterer.MarkerClusterer({ map, markers: all });
+      if (all.length > 0) {
+        new markerClusterer.MarkerClusterer({ map, markers: all });
+      }
     }
   }
 }
 </script>
 
 <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI0T40-yOZbntAKSaGCQcKv_10qUVqZdE&callback=initMap&loading=async">
 </script>
 
 </body>

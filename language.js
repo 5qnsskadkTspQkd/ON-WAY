@@ -2,139 +2,141 @@
  * [통합본] 안전 지도 및 서울 명소 관광 지도 다국어 번역 / 자동 매핑 스크립트
  */
 
+
 // ==========================================
 // 1. [데이터] 안전 지도 번역 데이터 (translations)
 // ==========================================
 const translations = {
     ko: {
         common: { home: "🏠 홈으로", loading: "데이터를 불러오는 중입니다...", legend: "📍 지도 마커 안내" },
-        adult: { 
-            title: "일반(성인) 안전 지도", 
+        adult: {
+            title: "일반(성인) 안전 지도",
             markers: ["📷 CCTV 설치 위치", "👥 유동인구 많은 곳", "🚗 교통사고 다발 구역", "🏥 병원", "👮 경찰서", "💡 가로등 위치", "🚶 유동인구 적은 곳", "⚠️ 범죄 발생 구역", "🚒 소방서", "🏠 지킴이집"]
         },
-        disabled: { 
-            title: "장애인 안전 지도", 
+        disabled: {
+            title: "장애인 안전 지도",
             markers: ["💡 가로등 위치", "♿ 장애인 편의시설", "🪑 벤치 및 휴식 공간", "🧊 무더위쉼터", "👥 유동인구 밀집 지역", "🌿 유동인구 적은 지역", "⚠️ 교통사고 다발구역"]
         },
-        elder: { 
-            title: "노인 안전 지도", 
+        elder: {
+            title: "노인 안전 지도",
             markers: ["🪑 벤치/쉼터", "🚶 평지 구간", "🔼 지하철역 에스컬레이터", "🏥 의료복지시설", "🚻 화장실", "🛗 지하철역 승강기", "♿ 휠체어 경사로", "☀️ 무더위쉼터"]
         },
-        pregnant: { 
-            title: "임산부 안전 지도", 
+        pregnant: {
+            title: "임산부 안전 지도",
             markers: ["♿ 경사로 및 무장애 시설", "💊 약국", "🚻 개방형 화장실", "🅿️ 임산부 우선 주차/배려구역", "🏥 응급 의료 기관", "🪑 휴식 공간(벤치/쉼터)", "🤱 수유실", "🚇 지하철/대중교통 연계시설"]
         },
-        child: { 
-            title: "어린이 및 청소년 안전 지도", 
+        child: {
+            title: "어린이 및 청소년 안전 지도",
             markers: ["💡 가로등 위치", "📉 유동인구 적은 곳", "⚠️ 범죄 발생 구역", "🚌 대중교통", "⚠️ 공사장/공폐가", "📈 유동인구 많은 곳", "🚑 교통사고 다발 구역", "🛡️ 안심 구역", "🚲 따릉이 대여소", "🧒 어린이 보호 구역"]
         },
-        moveweak: { 
-            title: "이동약자 안전 지도", 
+        moveweak: {
+            title: "이동약자 안전 지도",
             // [수정] CCTV와 가로등 안내 텍스트 제거 (HTML 노출 인덱스와 1:1 대응)
             markers: ["👥 유동인구 많은 지역", "🚶 유동인구 적은지역", "⚠️ 교통사고 다발구역", "🛗 지하철 승강기 위치 및 가동 현황"]
         },
-        patient: { 
-            title: "응급환자 안전 지도", 
+        patient: {
+            title: "응급환자 안전 지도",
             markers: ["🚒 소방서 및 안전센터", "🏥 병원", "🚑 응급실"]
         }
     },
     en: {
         common: { home: "🏠 Home", loading: "Loading data...", legend: "📍 Map Marker Guide" },
-        adult: { 
-            title: "Adult Safety Map", 
+        adult: {
+            title: "Adult Safety Map",
             markers: ["📷 CCTV Locations", "👥 Crowded Areas", "🚗 Accident-Prone Areas", "🏥 Hospitals", "👮 Police Stations", "💡 Street Lights", "🚶 Quiet Areas", "⚠️ Crime Areas", "🚒 Fire Stations", "🏠 Safe Houses"]
         },
-        disabled: { 
-            title: "Disabled Safety Map", 
+        disabled: {
+            title: "Disabled Safety Map",
             markers: ["💡 Street Lights", "♿ Accessibility Facilities", "🪑 Benches & Rest Areas", "🧊 Heat Shelters", "👥 Crowded Areas", "🌿 Quiet Areas", "⚠️ Accident-Prone Areas"]
         },
-        elder: { 
-            title: "Senior Safety Map", 
+        elder: {
+            title: "Senior Safety Map",
             markers: ["🪑 Benches & Shelters", "🚶 Flat Road Sections", "🔼 Subway Escalators", "🏥 Medical & Welfare Facilities", "🚻 Restrooms", "🛗 Subway Elevators", "♿ Wheelchair Ramps", "☀️ Heat Shelters"]
         },
-        pregnant: { 
-            title: "Pregnant Women Safety Map", 
+        pregnant: {
+            title: "Pregnant Women Safety Map",
             markers: ["♿ Ramps & Barrier-Free Facilities", "💊 Pharmacies", "🚻 Public Restrooms", "🅿️ Priority Parking for Pregnant Women", "🏥 Emergency Medical Facilities", "🪑 Rest Areas (Benches/Shelters)", "🤱 Nursing Rooms", "🚇 Subway & Transit Facilities"]
         },
-        child: { 
-            title: "Children & Youth Safety Map", 
+        child: {
+            title: "Children & Youth Safety Map",
             markers: ["💡 Street Lights", "📉 Quiet Areas", "⚠️ Crime Areas", "🚌 Public Transit", "⚠️ Construction & Abandoned Sites", "📈 Crowded Areas", "🚑 Accident-Prone Areas", "🛡️ Safe Zones", "🚲 Bike Rental Stations", "🧒 School Safety Zones"]
         },
-        moveweak: { 
-            title: "Mobility Impaired Safety Map", 
+        moveweak: {
+            title: "Mobility Impaired Safety Map",
             // [수정] 영문 데이터에서도 CCTV, Street Lights 제거
             markers: ["👥 Crowded Areas", "🚶 Quiet Areas", "⚠️ Accident-Prone Areas", "🛗 Subway Elevators & Operation Status"]
         },
-        patient: { 
-            title: "Emergency Patient Safety Map", 
+        patient: {
+            title: "Emergency Patient Safety Map",
             markers: ["🚒 Fire Station & Safety Center", "🏥 Hospital", "🚑 Emergency Room"]
         }
     },
     ja: {
         common: { home: "🏠 ホーム", loading: "データを読み込み중...", legend: "📍 マーカー案内" },
-        adult: { 
-            title: "一般(成人) 安全マップ", 
+        adult: {
+            title: "一般(成人) 安全マップ",
             markers: ["📷 CCTV設置場所", "👥 人通りの多い場所", "🚗 交通事故多発地域", "🏥 病院", "👮 警察署", "💡 街灯位置", "🚶 人通りの少ない場所", "⚠️ 犯罪発生地域", "🚒 消防署", "🏠 安全の家"]
         },
-        disabled: { 
-            title: "障害者安全マップ", 
+        disabled: {
+            title: "障害者安全マップ",
             markers: ["💡 街灯位置", "♿ 障害者向け施設", "🪑 ベンチ・休憩スペース", "🧊 猛暑シェルター", "👥 人通りの多い地域", "🌿 人通りの少ない地域", "⚠️ 交通事故多発地域"]
         },
-        elder: { 
-            title: "高齢者安全マップ", 
+        elder: {
+            title: "高齢者安全マップ",
             markers: ["🪑 ベン치・休憩スペース", "🚶 平坦な道", "🔼 駅エスカレーター", "🏥 医療福祉施設", "🚻 トイレ", "🛗 駅エレベーター", "♿ 車椅子スロープ", "☀️ 猛暑シェルター"]
         },
-        pregnant: { 
-            title: "妊産婦安全マップ", 
+        pregnant: {
+            title: "妊産婦安全マップ",
             markers: ["♿ スロープ・バリアフリー施設", "💊 薬局", "🚻 公共トイレ", "🅿️ 妊产妇优先停车场", "🏥 救急医療機関", "🪑 休憩スペース（ベンチ）", "🤱 授乳室", "🚇 地下鉄・交通連携施設"]
         },
-        child: { 
-            title: "子ども・青少年安全マップ", 
+        child: {
+            title: "子ども・青少年安全マップ",
             markers: ["💡 街灯位置", "📉 人通りの少ない場所", "⚠️ 犯罪発生地域", "🚌 公共交通", "⚠️ 工事現場・廃屋", "📈 人通りの多い場所", "🚑 交通事故多発地域", "🛡️ 安心ゾーン", "🚲 レンタサイクル", "🧒 子ども保護区域"]
         },
-        moveweak: { 
-            title: "交通弱者安全マップ", 
+        moveweak: {
+            title: "交通弱者安全マップ",
             // [수정] 일문 데이터에서도 CCTV, 街灯位置 제거
             markers: ["👥 人通りの多い地域", "🚶 人通りの少ない地域", "⚠️ 交通事故多発地域", "🛗 駅エレベーター位置および稼働状況"]
         },
-        patient: { 
-            title: "救急患者安全マップ", 
+        patient: {
+            title: "救急患者安全マップ",
             markers: ["🚒 消防署・安全センター", "🏥 病院", "🚑 救急医療センター"]
         }
     },
     zh: {
         common: { home: "🏠 首页", loading: "正在加载数据...", legend: "📍 地图标记说明" },
-        adult: { 
-            title: "成人安全地图", 
+        adult: {
+            title: "成人安全地图",
             markers: ["📷 CCTV位置", "👥 人流量大的地区", "🚗 交通事故多发地区", "🏥 医院", "👮 警察局", "💡 路灯位置", "🚶 人流量少的地区", "⚠️ 犯罪发生地区", "🚒 消防局", "🏠 安全之家"]
         },
-        disabled: { 
-            title: "残障人士安全地图", 
+        disabled: {
+            title: "残障人士安全地图",
             markers: ["💡 路灯位置", "♿ 无障碍设施", "🪑 长椅与休息区", "🧊 高温避难所", "👥 人流密集地区", "🌿 人流较少地区", "⚠️ 交通事故多发地区"]
         },
-        elder: { 
-            title: "老年人安全地图", 
+        elder: {
+            title: "老年人安全地图",
             markers: ["🪑 长椅与休息区", "🚶 平坦路段", "🔼 地铁扶梯", "🏥 医疗福利设施", "🚻 厕所", "🛗 地铁电梯", "♿ 轮椅坡道", "☀️ 高温避难所"]
         },
-        pregnant: { 
-            title: "孕产妇安全地图", 
+        pregnant: {
+            title: "孕产妇安全地图",
             markers: ["♿ 坡道及无障碍设施", "💊 药店", "🚻 公共厕所", "🅿️ 孕产妇优先停车区", "🏥 急诊医疗机构", "🪑 休息区（长椅·避难所）", "🤱 哺乳室", "🚇 地铁·公共交通设施"]
         },
-        child: { 
-            title: "儿童及青少年安全地图", 
+        child: {
+            title: "儿童及青少年安全地图",
             markers: ["💡 路灯位置", "📉 人流量少的地区", "⚠️ 犯罪发生地区", "🚌 公共交通", "⚠️ 施工现场·废弃建筑", "📈 人流量大的地区", "🚑 交通事故多发地区", "🛡️ 安全区域", "🚲 共享单车站", "🧒 儿童保护区"]
         },
-        moveweak: { 
-            title: "行动不便者安全地图", 
+        moveweak: {
+            title: "行动不便者安全地图",
             // [수정] 중문 데이터에서도 CCTV, 路灯位置 제거
             markers: ["👥 人流密集地区", "🚶 人流较少地区", "⚠️ 交通事故多发地区", "🛗 地铁电梯位置及运行状况"]
         },
-        patient: { 
-            title: "急诊患者安全地图", 
+        patient: {
+            title: "急诊患者安全地图",
             markers: ["🚒 消防局及安全中心", "🏥 医院", "🚑 急诊室"]
         }
     }
 };
+
 
 // ==========================================
 // 2. [데이터] 서울 명소 관광 지도 번역 데이터 (LANGUAGES)
@@ -266,6 +268,7 @@ const LANGUAGES = {
     }
 };
 
+
 if (typeof map === 'undefined') var map = null;
 if (typeof categoryMarkers === 'undefined') var categoryMarkers = null;
 if (typeof activeInfoWindow === 'undefined') var activeInfoWindow = null;
@@ -273,8 +276,10 @@ if (typeof CATEGORY_COLORS === 'undefined') {
     var CATEGORY_COLORS = { tradition: '#e67e22', modern: '#3498db', nature: '#2ecc71', energy: '#9b59b6' };
 }
 
+
 const setTxt = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 const setHtml = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+
 
 /**
  * ==========================================
@@ -283,7 +288,7 @@ const setHtml = (id, html) => { const el = document.getElementById(id); if (el) 
  */
 function applyLanguage(page) {
     const lang = localStorage.getItem("language") || "ko";
-    
+   
     let activePage = page;
     const href = window.location.href;
     if (href.includes("patient") || href.includes("emergency")) activePage = "patient";
@@ -294,19 +299,23 @@ function applyLanguage(page) {
     else if (href.includes("child")) activePage = "child";
     else if (href.includes("adult")) activePage = "adult";
 
+
     if (!translations[lang] || !translations[lang][activePage]) {
         console.warn(`번역 데이터를 찾을 수 없습니다. Lang: ${lang}, Page: ${activePage}`);
         return;
     }
 
+
     const pageData = translations[lang][activePage];
     const commonData = translations[lang].common;
+
 
     setTxt("pageTitle", pageData.title);
     setTxt("mapTitle", pageData.title);
     setTxt("legendTitle", commonData.legend);
     setTxt("homeBtn", commonData.home);
     setTxt("loadingText", commonData.loading);
+
 
     // 하단 마커 배열 주입부 버그 방지 최적화
     const markerElements = document.querySelectorAll(".legend-list li, .legend-item .legend-text, [id$='Text']");
@@ -321,6 +330,7 @@ function applyLanguage(page) {
     }
 }
 
+
 /**
  * ==========================================
  * 4. [로직] 서울 명소 관광 지도 번역 시스템 (changeLanguage)
@@ -330,26 +340,29 @@ function changeLanguage(lang) {
     if (!LANGUAGES[lang]) return;
     localStorage.setItem("language", lang);
 
+
     setTxt("txt-title", LANGUAGES[lang].title);
     setTxt("txt-home", LANGUAGES[lang].home);
     setTxt("txt-filter-title", LANGUAGES[lang].filterTitle);
     setTxt("txt-legend-title", LANGUAGES[lang].legendTitle);
-  
+ 
     const categories = ['tradition', 'modern', 'nature', 'energy'];
     const emojis = { tradition: '🏯', modern: '🌆', nature: '🌿', energy: '⚡' };
-    
+   
     categories.forEach(cat => {
         const btn = document.querySelector(`[data-category="${cat}"]`);
-        const key = 'cat' + cat.charAt(0).toUpperCase() + cat.slice(1); 
+        const key = 'cat' + cat.charAt(0).toUpperCase() + cat.slice(1);
         if (btn && LANGUAGES[lang][key]) {
             btn.innerHTML = `${emojis[cat]} ${LANGUAGES[lang][key]}`;
         }
     });
 
+
     setHtml("txt-leg-tradition", `<div class="legend-dot" style="background:#e67e22;"></div> ${LANGUAGES[lang].legendTradition}`);
     setHtml("txt-leg-modern", `<div class="legend-dot" style="background:#3498db;"></div> ${LANGUAGES[lang].legendModern}`);
     setHtml("txt-leg-nature", `<div class="legend-dot" style="background:#2ecc71;"></div> ${LANGUAGES[lang].legendNature}`);
     setHtml("txt-leg-energy", `<div class="legend-dot" style="background:#9b59b6;"></div> ${LANGUAGES[lang].legendEnergy}`);
+
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
         if(btn.getAttribute('data-lang') === lang) {
@@ -359,8 +372,10 @@ function changeLanguage(lang) {
         }
     });
 
+
     updateMapLanguage();
 }
+
 
 /**
  * 5. 관광 지도 전용 마커 및 인포윈도우 동적 리프레시 함수
@@ -369,22 +384,26 @@ function updateMapLanguage() {
     const savedLang = localStorage.getItem("language") || "ko";
     if (!map || !categoryMarkers || typeof google === 'undefined') return;
 
+
     if (activeInfoWindow) {
         activeInfoWindow.close();
     }
+
 
     Object.keys(categoryMarkers).forEach(category => {
         const color = CATEGORY_COLORS[category] || '#333';
         if (!Array.isArray(categoryMarkers[category])) return;
 
+
         categoryMarkers[category].forEach((marker, index) => {
             if (!LANGUAGES[savedLang][category] || !LANGUAGES[savedLang][category][index]) return;
-            
+           
             const placeLangData = LANGUAGES[savedLang][category][index];
-            
+           
             if (typeof marker.setTitle === 'function') {
                 marker.setTitle(placeLangData.name);
             }
+
 
             const infoWindow = new google.maps.InfoWindow({
                 content: `
@@ -394,6 +413,7 @@ function updateMapLanguage() {
                     </div>
                 `
             });
+
 
             google.maps.event.clearInstanceListeners(marker);
             marker.addListener("click", () => {
@@ -405,6 +425,7 @@ function updateMapLanguage() {
     });
 }
 
+
 /**
  * ==========================================
  * 6. [초기화] 자동 도메인 판별 및 언어 로드 트리거
@@ -414,9 +435,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedLang = localStorage.getItem("language") || "ko";
     const href = window.location.href;
 
+
     if (href.includes("tour") || href.includes("attraction") || document.getElementById("txt-title")) {
         changeLanguage(savedLang);
     } else {
         applyLanguage();
     }
 });
+
