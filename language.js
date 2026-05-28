@@ -427,19 +427,31 @@ function updateMapLanguage() {
 
 
 /**
- * ==========================================
- * 6. [초기화] 자동 도메인 판별 및 언어 로드 트리거
- * ==========================================
+ * 6. [초기화] 자동 도메인 판별 및 언어 로드 트리거 (수정본)
  */
 document.addEventListener("DOMContentLoaded", () => {
-    const savedLang = localStorage.getItem("language") || "ko";
-    const href = window.location.href;
+    const path = window.location.href;
+    
+    // URL에 포함된 키워드를 우선순위대로 검사
+    let currentPage = "";
 
-
-    if (href.includes("tour") || href.includes("attraction") || document.getElementById("txt-title")) {
-        changeLanguage(savedLang);
-    } else {
-        applyLanguage();
+    if (path.includes("patient")) currentPage = "patient";
+    else if (path.includes("moveweak")) currentPage = "moveweak";
+    else if (path.includes("disabled")) currentPage = "disabled";
+    else if (path.includes("elder")) currentPage = "elder";
+    else if (path.includes("pregnant")) currentPage = "pregnant";
+    else if (path.includes("child")) currentPage = "child";
+    // adult를 가장 마지막에 검사하되, 명확히 확인
+    else if (path.includes("adult")) currentPage = "adult";
+    else {
+        // 혹시 URL에 키워드가 없다면, 
+        // 페이지 내의 title 태그나 다른 요소를 통해 유추하거나 기본값 지정
+        currentPage = "adult"; 
     }
+
+    // 판별된 페이지를 콘솔에서 확인 (디버깅용)
+    console.log("현재 감지된 페이지 타입:", currentPage);
+
+    applyLanguage(currentPage);
 });
 

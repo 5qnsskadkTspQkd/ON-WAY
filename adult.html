@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>일반(성인) 안전 지도</title>
+<title id="pageTitleTag">일반(성인) 안전 지도</title>
 
 <style>
 body {
@@ -127,8 +127,9 @@ body {
 <body>
 
 <div class="header-bar">
-  <h2>일반(성인) 안전 지도</h2>
-  <button class="back-btn" onclick="location.href='index.html'">🏠 홈으로</button>
+  <!-- ✅ applyLanguage()가 찾는 id="pageTitle", id="homeBtn" 추가 -->
+  <h2 id="pageTitle">일반(성인) 안전 지도</h2>
+  <button class="back-btn" id="homeBtn" onclick="location.href='index.html'">🏠 홈으로</button>
 </div>
 
 <div class="map-wrapper">
@@ -142,81 +143,24 @@ body {
 <div class="error-box" id="errorBox"></div>
 
 <div class="legend">
-  <h3>📍 지도 마커 안내</h3>
+  <!-- ✅ id="legendTitle" 추가 -->
+  <h3 id="legendTitle">📍 지도 마커 안내</h3>
   <div class="legend-grid">
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/149/149852.png">
-      <span class="legend-text">📷 CCTV 설치 위치</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-      <span class="legend-text">💡 가로등 위치</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
-      <span class="legend-text">👥 유동인구 많은 곳</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
-      <span class="legend-text">🚶 유동인구 적은 곳</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/296/296216.png">
-      <span class="legend-text">🚗 교통사고 다발 구역</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
-      <span class="legend-text">⚠️ 범죄 발생 구역</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2785/2785482.png">
-      <span class="legend-text">🏥 병원</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text">🚒 소방서</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-      <span class="legend-text">👮 경찰서</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/619/619153.png">
-      <span class="legend-text">🏠 지킴이집</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text">🛤️ 골목길 (폭 좁은 구간)</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text">🏚️ 공사장·공폐가</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text">🧒 어린이 보호 구역</span>
-    </div>
-
-    <div class="legend-item">
-      <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png">
-      <span class="legend-text">📌 사용자 지정 장소</span>
-    </div>
-
-  </div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="cctvText">📷 CCTV 설치 위치</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="crowdText">👥 유동인구 많은 곳</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="accidentText">🚗 교통사고 다발 구역</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="hospitalText">🏥 병원</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="policeText">👮 경찰서</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="lightText">💡 가로등 위치</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="quietText">🚶 유동인구 적은 곳</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="crimeText">⚠️ 범죄 발생 구역</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="fireText">🚒 소방서</span></div>
+  <div class="legend-item"><img src="..."><span class="legend-text" id="safehouseText">🏠 지킴이집</span></div>
 </div>
+</div>
+
+<!-- ✅ language.js 로드 (노인 버전과 동일하게) -->
+<script src="language.js"></script>
 
 <script>
 let map;
@@ -327,6 +271,15 @@ function initMap() {
     })
     .catch(() => layerDone("가로등", true));
 }
+
+// ✅ language.js의 applyLanguage("adult") 명시적 호출
+// DOMContentLoaded 자동 감지가 URL에 "adult" 포함 여부에 의존하므로
+// 파일명이 다를 경우를 대비해 window.load에서 한번 더 보장
+window.addEventListener("load", function () {
+  if (typeof applyLanguage === "function") {
+    applyLanguage("adult");
+  }
+});
 </script>
 
 <!-- Google Maps API -->
